@@ -202,7 +202,9 @@ export interface VisitRecord {
   pendingFollowUp: string;
   suggestedGuidance: string;
   safetyPropaganda: string[];
+  safetyPropagandaOther: string;
   generalPropaganda: string[];
+  generalPropagandaOther: string;
   supervisorNotes: string;
   providerAttitude: string;
   serviceNeeds: string;
@@ -389,7 +391,9 @@ export const initialRecord: VisitRecord = {
   pendingFollowUp: '',
   suggestedGuidance: '',
   safetyPropaganda: [],
+  safetyPropagandaOther: '',
   generalPropaganda: [],
+  generalPropagandaOther: '',
   supervisorNotes: '',
   providerAttitude: '',
   serviceNeeds: '',

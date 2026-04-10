@@ -230,6 +230,14 @@ export const generateVisitReport = (record: VisitRecord): string => {
     record.hasPendingFollowUp === '有' ? `狀況說明：<br/>${nl2br(record.pendingFollowUp)}` : ''
   ].filter(Boolean).join('<br/>');
 
+  const formatPropaganda = (vals: string[], otherVal: string) => {
+    if (vals.length === 0) return null;
+    return vals.map(v => {
+      if (v === '其他') return otherVal ? nl2br(otherVal) : '';
+      return v;
+    }).filter(Boolean).join('<br/>');
+  };
+
   return `
     <div style="font-family: 'Microsoft JhengHei', sans-serif; line-height: 1.6; color: #333;">
       <h1 style="text-align: center; color: #e34b87; margin-bottom: 30px;">居家托育服務中心訪視紀錄表</h1>
@@ -252,8 +260,8 @@ export const generateVisitReport = (record: VisitRecord): string => {
       ${renderSection('緊急事件演練與抽問', emergencyInfo, true)}
       ${renderSection('待追蹤、改善事項', pendingInfo, true)}
       ${renderSection('建議輔導事項', record.suggestedGuidance)}
-      ${renderSection('托育安全宣導事項', record.safetyPropaganda.length > 0 ? record.safetyPropaganda.join('<br/>') : null, true)}
-      ${renderSection('宣導事項', record.generalPropaganda.length > 0 ? record.generalPropaganda.join('<br/>') : null, true)}
+      ${renderSection('托育安全宣導事項', formatPropaganda(record.safetyPropaganda, record.safetyPropagandaOther), true)}
+      ${renderSection('宣導事項', formatPropaganda(record.generalPropaganda, record.generalPropagandaOther), true)}
       ${renderSection('督導（提醒）事項', record.supervisorNotes)}
       ${renderSection('針對建議輔導後托育人員態度', record.providerAttitude)}
       ${renderSection('托育人員反映需求/建議', record.serviceNeeds)}

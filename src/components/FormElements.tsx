@@ -152,12 +152,11 @@ export const SelectField: React.FC<SelectFieldProps> = ({ label, options, value,
             其他
           </button>
           {value === '其他' && (
-            <input 
-              type="text"
+            <textarea 
               value={otherValue}
               onChange={(e) => onOtherChange?.(e.target.value)}
-              placeholder="請輸入..."
-              className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand"
+              placeholder="請輸入其他內容..."
+              className="w-full mt-2 px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand min-h-[80px] resize-y"
             />
           )}
         </div>
@@ -216,12 +215,11 @@ export const MultiSelectField: React.FC<MultiSelectFieldProps> = ({ label, optio
               其他
             </button>
             {values.includes('其他') && (
-              <input 
-                type="text"
+              <textarea 
                 value={otherValue}
                 onChange={(e) => onOtherChange?.(e.target.value)}
-                placeholder="請輸入..."
-                className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand"
+                placeholder="請輸入其他內容..."
+                className="w-full mt-2 px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-brand min-h-[80px] resize-y"
               />
             )}
           </div>

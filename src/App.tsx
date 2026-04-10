@@ -111,7 +111,7 @@ export default function App() {
       const content = generateVisitReport(record);
       updateField('fullContent', content);
     }
-  }, [autoSync, record.providerName, record.providerNo, record.providerId, record.visitMethod, record.visitMethodOther, record.visitDate, record.visitTime, record.visitorName, record.hasChildren, record.children, record.serviceType, record.visitCategories, record.newChildName, record.reinforceReason, record.annualVisitCount, record.currentVisitCount, record.isJoint, record.jointProvider1Name, record.jointProvider1Children, record.jointProvider2Name, record.jointProvider2Children, record.prevFollowUp, record.currentVisitFocus, record.unitName, record.subsidyChildCount, record.subsidyChildNames, record.hasNoSubsidyChild, record.noSubsidyInfo, record.actualChildCount, record.siteCheckResult, record.siteCheckReason, record.feeCheckResult, record.feeCheckReason, record.feeDetails, record.matchNeeds, record.visitStatusDesc, record.childEnrollmentStatus, record.childStatuses, record.envCheckResult, record.envCheckReason, record.envFacilities, record.envFacilitiesOther, record.envComfort, record.envComfortOther, record.noSmokingResult, record.noSmokingDesc, record.envDesc, record.envCheckItems, record.routineCheck, record.routineDesc, record.activities, record.activitiesOther, record.mealPrep, record.mealPrepOther, record.dietQuality, record.dietQualityDesc, record.mealSpace, record.mealSpaceDesc, record.mealWay, record.mealWayDesc, record.mealCleanProcess, record.childCleanAfterMeal, record.toyClean, record.toyCleanOther, record.toyCleanDesc, record.envClean, record.envCleanOther, record.envCleanDesc, record.qualityCheckSummary, record.qualityDesc, record.qualityCheckResult, record.qualityCheckItems, record.qualityCheckReason, record.gameInteraction, record.gameInteractionDesc, record.positiveResponse, record.positiveResponseDesc, record.socialDevSupport, record.socialDevSupportDesc, record.otherInteractionObs, record.dailyHandover, record.parentCooperation, record.providerHealthSelf, record.visitorEval, record.visitorEvalReasons, record.visitorEvalOther, record.familyHealth, record.familyHealthReason, record.familySupport, record.familySupportDesc, record.workImpactFamily, record.workImpactFamilyDesc, record.hasEmergencyDrill, record.emergencyDrill, record.hasPendingFollowUp, record.pendingFollowUp, record.suggestedGuidance, record.safetyPropaganda, record.generalPropaganda, record.supervisorNotes, record.providerAttitude, record.serviceNeeds, record.fieldGuidanceRecord, record.guidanceAttitude, record.guidanceNeeds, record.nextFollowUpFocus, record.isViolation, record.reviewResult, record.reviewResultDesc]);
+  }, [autoSync, record.providerName, record.providerNo, record.providerId, record.visitMethod, record.visitMethodOther, record.visitDate, record.visitTime, record.visitorName, record.hasChildren, record.children, record.serviceType, record.visitCategories, record.newChildName, record.reinforceReason, record.annualVisitCount, record.currentVisitCount, record.isJoint, record.jointProvider1Name, record.jointProvider1Children, record.jointProvider2Name, record.jointProvider2Children, record.prevFollowUp, record.currentVisitFocus, record.unitName, record.subsidyChildCount, record.subsidyChildNames, record.hasNoSubsidyChild, record.noSubsidyInfo, record.actualChildCount, record.siteCheckResult, record.siteCheckReason, record.feeCheckResult, record.feeCheckReason, record.feeDetails, record.matchNeeds, record.visitStatusDesc, record.childEnrollmentStatus, record.childStatuses, record.envCheckResult, record.envCheckReason, record.envFacilities, record.envFacilitiesOther, record.envComfort, record.envComfortOther, record.noSmokingResult, record.noSmokingDesc, record.envDesc, record.envCheckItems, record.routineCheck, record.routineDesc, record.activities, record.activitiesOther, record.mealPrep, record.mealPrepOther, record.dietQuality, record.dietQualityDesc, record.mealSpace, record.mealSpaceDesc, record.mealWay, record.mealWayDesc, record.mealCleanProcess, record.childCleanAfterMeal, record.toyClean, record.toyCleanOther, record.toyCleanDesc, record.envClean, record.envCleanOther, record.envCleanDesc, record.qualityCheckSummary, record.qualityDesc, record.qualityCheckResult, record.qualityCheckItems, record.qualityCheckReason, record.gameInteraction, record.gameInteractionDesc, record.positiveResponse, record.positiveResponseDesc, record.socialDevSupport, record.socialDevSupportDesc, record.otherInteractionObs, record.dailyHandover, record.parentCooperation, record.providerHealthSelf, record.visitorEval, record.visitorEvalReasons, record.visitorEvalOther, record.familyHealth, record.familyHealthReason, record.familySupport, record.familySupportDesc, record.workImpactFamily, record.workImpactFamilyDesc, record.hasEmergencyDrill, record.emergencyDrill, record.hasPendingFollowUp, record.pendingFollowUp, record.suggestedGuidance, record.safetyPropaganda, record.safetyPropagandaOther, record.generalPropaganda, record.generalPropagandaOther, record.supervisorNotes, record.providerAttitude, record.serviceNeeds, record.fieldGuidanceRecord, record.guidanceAttitude, record.guidanceNeeds, record.nextFollowUpFocus, record.isViolation, record.reviewResult, record.reviewResultDesc]);
 
   // Update time every second
   useEffect(() => {
@@ -953,7 +953,7 @@ export default function App() {
               <TextAreaField label="十八、建議輔導事項" value={record.suggestedGuidance} onChange={(v) => updateField('suggestedGuidance', v)} />
             </FormSection>
 
-            <FormSection title="十九、托育安全宣導事項" icon={<ShieldCheck className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['safety']} onToggle={() => toggleSection('safety')} extraActions={<SectionActions sectionKeys={['safetyPropaganda']} title="托育安全宣導事項" />}>
+            <FormSection title="十九、托育安全宣導事項" icon={<ShieldCheck className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['safety']} onToggle={() => toggleSection('safety')} extraActions={<SectionActions sectionKeys={['safetyPropaganda', 'safetyPropagandaOther']} title="托育安全宣導事項" />}>
               <MultiSelectField 
                 label="十九、托育安全宣導事項" 
                 options={[
@@ -967,10 +967,13 @@ export default function App() {
                 ]} 
                 values={record.safetyPropaganda} 
                 onChange={(v) => updateField('safetyPropaganda', v)} 
+                allowOther
+                otherValue={record.safetyPropagandaOther}
+                onOtherChange={(v) => updateField('safetyPropagandaOther', v)}
               />
             </FormSection>
 
-            <FormSection title="二十、宣導事項" icon={<Info className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['general']} onToggle={() => toggleSection('general')} extraActions={<SectionActions sectionKeys={['generalPropaganda']} title="宣導事項" />}>
+            <FormSection title="二十、宣導事項" icon={<Info className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['general']} onToggle={() => toggleSection('general')} extraActions={<SectionActions sectionKeys={['generalPropaganda', 'generalPropagandaOther']} title="宣導事項" />}>
               <MultiSelectField 
                 label="二十、宣導事項" 
                 options={[
@@ -987,6 +990,9 @@ export default function App() {
                 ]} 
                 values={record.generalPropaganda} 
                 onChange={(v) => updateField('generalPropaganda', v)} 
+                allowOther
+                otherValue={record.generalPropagandaOther}
+                onOtherChange={(v) => updateField('generalPropagandaOther', v)}
               />
             </FormSection>
 
