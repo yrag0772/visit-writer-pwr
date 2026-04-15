@@ -37,7 +37,6 @@ export interface ChildStatus {
   appearanceDesc: string;
   healthDesc: string;
   spiritDesc: string;
-  appearanceDetail: string;
   sleepSafe: string;
   sleepStatus: string[];
   sleepStatusOther: string;
@@ -253,7 +252,6 @@ export const initialChildStatus: ChildStatus = {
   appearanceDesc: '',
   healthDesc: '',
   spiritDesc: '',
-  appearanceDetail: '',
   sleepSafe: '',
   sleepStatus: [],
   sleepStatusOther: '',

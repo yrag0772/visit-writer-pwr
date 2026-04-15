@@ -142,7 +142,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                     onOtherChange={(v) => updateStatus(index, 'appearanceOther', v)}
                   />
                 )}
-                <TextAreaField label="身體外觀詳細說明" value={s.appearanceDetail} onChange={(v) => updateStatus(index, 'appearanceDetail', v)} placeholder="請輸入詳細說明..." />
+                <TextAreaField label="身體外觀詳細說明" value={s.appearanceDesc} onChange={(v) => updateStatus(index, 'appearanceDesc', v)} placeholder="請輸入詳細說明..." />
               </div>
 
               <div className="space-y-4 p-4 bg-blue-50/50 rounded-xl border border-blue-100">

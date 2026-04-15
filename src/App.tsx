@@ -128,7 +128,7 @@ export default function App() {
       "十三、互動與社會行為", "十四、保親關係", "十五、托育人員現況", 
       "十六、緊急事件演練與抽問", "十七、待追蹤、改善事項", "十八、建議輔導事項", 
       "十九、托育安全宣導事項", "二十、宣導事項", "二十一、現場輔導紀錄", 
-      "二十二、針對建議輔導態度", "二十三、反映需求/建議", "二十四、下次輔導重點", 
+      "二十二、針對建議輔導後托育人員態度", "二十三、托育人員反映需求/建議", "二十四、下次輔導重點", 
       "二十五、是否違反考核項目"
     ];
 
@@ -140,7 +140,7 @@ export default function App() {
           }
         });
       },
-      { threshold: 0.2, rootMargin: '-10% 0px -80% 0px' }
+      { threshold: 0.1, rootMargin: '-10% 0px -70% 0px' }
     );
 
     sections.forEach((id) => {
@@ -396,10 +396,10 @@ export default function App() {
       case "二十一、現場輔導紀錄":
         isFilled = !!record.fieldGuidanceRecord;
         break;
-      case "二十二、針對建議輔導態度":
+      case "二十二、針對建議輔導後托育人員態度":
         isFilled = !!record.providerAttitude;
         break;
-      case "二十三、反映需求/建議":
+      case "二十三、托育人員反映需求/建議":
         isFilled = !!record.serviceNeeds;
         break;
       case "二十四、下次輔導重點":
@@ -604,7 +604,7 @@ export default function App() {
                   "十三、互動與社會行為", "十四、保親關係", "十五、托育人員現況", 
                   "十六、緊急事件演練與抽問", "十七、待追蹤、改善事項", "十八、建議輔導事項", 
                   "十九、托育安全宣導事項", "二十、宣導事項", "二十一、現場輔導紀錄", 
-                  "二十二、針對建議輔導態度", "二十三、反映需求/建議", "二十四、下次輔導重點", 
+                  "二十二、針對建議輔導後托育人員態度", "二十三、托育人員反映需求/建議", "二十四、下次輔導重點", 
                   "二十五、是否違反考核項目"
                 ].map((title) => {
                   const { isFilled, hasIssues } = getSectionStatus(title);
