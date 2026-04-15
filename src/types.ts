@@ -148,16 +148,20 @@ export interface VisitRecord {
   // 十二、托育品質
   routineCheck: CheckResult;
   routineDesc: string;
+  routineOther: string;
   activities: string[];
   activitiesOther: string;
   mealPrep: string[];
   mealPrepOther: string;
   dietQuality: CheckResult;
   dietQualityDesc: string;
+  dietQualityOther: string;
   mealSpace: CheckResult;
   mealSpaceDesc: string;
+  mealSpaceOther: string;
   mealWay: CheckResult;
   mealWayDesc: string;
+  mealWayOther: string;
   mealCleanProcess: string;
   childCleanAfterMeal: string;
   toyClean: string;
@@ -166,11 +170,13 @@ export interface VisitRecord {
   envClean: string;
   envCleanOther: string;
   envCleanDesc: string;
-  qualityCheckSummary: string;
   qualityDesc: string;
   qualityCheckResult: CheckResult;
   qualityCheckItems: string[];
   qualityCheckReason: string;
+  fourChildCheckResult: CheckResult;
+  fourChildCheckItems: string[];
+  fourChildCheckReason: string;
 
   // 十三、互動
   gameInteraction: YesNo;
@@ -188,8 +194,9 @@ export interface VisitRecord {
   visitorEval: NormalAbnormal;
   visitorEvalReasons: string[];
   visitorEvalOther: string;
-  familyHealth: '健康' | '尚可' | '無同住成員' | '訪視未遇家庭成員' | '不佳' | '';
+  familyHealth: '健康' | '尚可' | '無同住成員' | '訪視未遇家庭成員' | '不佳' | '無明顯異常' | '';
   familyHealthReason: string;
+  familyHealthDesc: string;
   familySupport: YesNo;
   familySupportDesc: string;
   workImpactFamily: YesNo;
@@ -198,6 +205,7 @@ export interface VisitRecord {
   // 十六 - 二十六
   hasEmergencyDrill: HasNo;
   emergencyDrill: string;
+  emergencyDrillDesc: string;
   hasPendingFollowUp: HasNo;
   pendingFollowUp: string;
   suggestedGuidance: string;
@@ -205,17 +213,11 @@ export interface VisitRecord {
   safetyPropagandaOther: string;
   generalPropaganda: string[];
   generalPropagandaOther: string;
-  supervisorNotes: string;
   providerAttitude: string;
   serviceNeeds: string;
   fieldGuidanceRecord: string;
-  guidanceAttitude: string;
-  guidanceNeeds: string;
-
-  // 二十七 - 二十九
   nextFollowUpFocus: string;
   isViolation: YesNo;
-  reviewResult: string;
   reviewResultDesc: string;
 
   fullContent: string;
@@ -343,16 +345,20 @@ export const initialRecord: VisitRecord = {
   envCheckItems: [],
   routineCheck: '',
   routineDesc: '',
+  routineOther: '',
   activities: [],
   activitiesOther: '',
   mealPrep: [],
   mealPrepOther: '',
   dietQuality: '',
   dietQualityDesc: '',
+  dietQualityOther: '',
   mealSpace: '',
   mealSpaceDesc: '',
+  mealSpaceOther: '',
   mealWay: '',
   mealWayDesc: '',
+  mealWayOther: '',
   mealCleanProcess: '',
   childCleanAfterMeal: '',
   toyClean: '',
@@ -361,11 +367,13 @@ export const initialRecord: VisitRecord = {
   envClean: '',
   envCleanOther: '',
   envCleanDesc: '',
-  qualityCheckSummary: '',
   qualityDesc: '',
   qualityCheckResult: '',
   qualityCheckItems: [],
   qualityCheckReason: '',
+  fourChildCheckResult: '',
+  fourChildCheckItems: [],
+  fourChildCheckReason: '',
   gameInteraction: '',
   gameInteractionDesc: '',
   positiveResponse: '',
@@ -381,12 +389,14 @@ export const initialRecord: VisitRecord = {
   visitorEvalOther: '',
   familyHealth: '',
   familyHealthReason: '',
+  familyHealthDesc: '',
   familySupport: '',
   familySupportDesc: '',
   workImpactFamily: '',
   workImpactFamilyDesc: '',
   hasEmergencyDrill: '',
   emergencyDrill: '',
+  emergencyDrillDesc: '',
   hasPendingFollowUp: '',
   pendingFollowUp: '',
   suggestedGuidance: '',
@@ -394,15 +404,11 @@ export const initialRecord: VisitRecord = {
   safetyPropagandaOther: '',
   generalPropaganda: [],
   generalPropagandaOther: '',
-  supervisorNotes: '',
   providerAttitude: '',
   serviceNeeds: '',
   fieldGuidanceRecord: '',
-  guidanceAttitude: '',
-  guidanceNeeds: '',
   nextFollowUpFocus: '',
   isViolation: '',
-  reviewResult: '',
   reviewResultDesc: '',
   fullContent: '',
 };

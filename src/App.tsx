@@ -27,7 +27,7 @@ import {
   ChevronLeft
 } from 'lucide-react';
 import { VisitRecord, initialRecord, ServiceType, VisitMethod, VisitCategory, CheckResult, YesNo, NormalAbnormal } from './types';
-import { ENV_SAFETY_INDICATORS, QUALITY_ASSESSMENT_INDICATORS } from './constants';
+import { ENV_SAFETY_INDICATORS, QUALITY_ASSESSMENT_INDICATORS, FOUR_CHILD_CHECK_INDICATORS } from './constants';
 import { FormSection, InputField, SelectField, MultiSelectField, TextAreaField } from './components/FormElements';
 import { ChildInfoForm } from './components/ChildInfoForm';
 import { ChildStatusForm } from './components/ChildStatusForm';
@@ -111,7 +111,7 @@ export default function App() {
       const content = generateVisitReport(record);
       updateField('fullContent', content);
     }
-  }, [autoSync, record.providerName, record.providerNo, record.providerId, record.visitMethod, record.visitMethodOther, record.visitDate, record.visitTime, record.visitorName, record.hasChildren, record.children, record.serviceType, record.visitCategories, record.newChildName, record.reinforceReason, record.annualVisitCount, record.currentVisitCount, record.isJoint, record.jointProvider1Name, record.jointProvider1Children, record.jointProvider2Name, record.jointProvider2Children, record.prevFollowUp, record.currentVisitFocus, record.unitName, record.subsidyChildCount, record.subsidyChildNames, record.hasNoSubsidyChild, record.noSubsidyInfo, record.actualChildCount, record.siteCheckResult, record.siteCheckReason, record.feeCheckResult, record.feeCheckReason, record.feeDetails, record.matchNeeds, record.visitStatusDesc, record.childEnrollmentStatus, record.childStatuses, record.envCheckResult, record.envCheckReason, record.envFacilities, record.envFacilitiesOther, record.envComfort, record.envComfortOther, record.noSmokingResult, record.noSmokingDesc, record.envDesc, record.envCheckItems, record.routineCheck, record.routineDesc, record.activities, record.activitiesOther, record.mealPrep, record.mealPrepOther, record.dietQuality, record.dietQualityDesc, record.mealSpace, record.mealSpaceDesc, record.mealWay, record.mealWayDesc, record.mealCleanProcess, record.childCleanAfterMeal, record.toyClean, record.toyCleanOther, record.toyCleanDesc, record.envClean, record.envCleanOther, record.envCleanDesc, record.qualityCheckSummary, record.qualityDesc, record.qualityCheckResult, record.qualityCheckItems, record.qualityCheckReason, record.gameInteraction, record.gameInteractionDesc, record.positiveResponse, record.positiveResponseDesc, record.socialDevSupport, record.socialDevSupportDesc, record.otherInteractionObs, record.dailyHandover, record.parentCooperation, record.providerHealthSelf, record.visitorEval, record.visitorEvalReasons, record.visitorEvalOther, record.familyHealth, record.familyHealthReason, record.familySupport, record.familySupportDesc, record.workImpactFamily, record.workImpactFamilyDesc, record.hasEmergencyDrill, record.emergencyDrill, record.hasPendingFollowUp, record.pendingFollowUp, record.suggestedGuidance, record.safetyPropaganda, record.safetyPropagandaOther, record.generalPropaganda, record.generalPropagandaOther, record.supervisorNotes, record.providerAttitude, record.serviceNeeds, record.fieldGuidanceRecord, record.guidanceAttitude, record.guidanceNeeds, record.nextFollowUpFocus, record.isViolation, record.reviewResult, record.reviewResultDesc]);
+  }, [autoSync, record.providerName, record.providerNo, record.providerId, record.visitMethod, record.visitMethodOther, record.visitDate, record.visitTime, record.visitorName, record.hasChildren, record.children, record.serviceType, record.visitCategories, record.newChildName, record.reinforceReason, record.annualVisitCount, record.currentVisitCount, record.isJoint, record.jointProvider1Name, record.jointProvider1Children, record.jointProvider2Name, record.jointProvider2Children, record.prevFollowUp, record.currentVisitFocus, record.unitName, record.subsidyChildCount, record.subsidyChildNames, record.hasNoSubsidyChild, record.noSubsidyInfo, record.actualChildCount, record.siteCheckResult, record.siteCheckReason, record.feeCheckResult, record.feeCheckReason, record.feeDetails, record.matchNeeds, record.visitStatusDesc, record.childEnrollmentStatus, record.childStatuses, record.envCheckResult, record.envCheckReason, record.envFacilities, record.envFacilitiesOther, record.envComfort, record.envComfortOther, record.noSmokingResult, record.noSmokingDesc, record.envDesc, record.envCheckItems, record.routineCheck, record.routineDesc, record.routineOther, record.activities, record.activitiesOther, record.mealPrep, record.mealPrepOther, record.dietQuality, record.dietQualityDesc, record.dietQualityOther, record.mealSpace, record.mealSpaceDesc, record.mealSpaceOther, record.mealWay, record.mealWayDesc, record.mealWayOther, record.mealCleanProcess, record.childCleanAfterMeal, record.toyClean, record.toyCleanOther, record.toyCleanDesc, record.envClean, record.envCleanOther, record.envCleanDesc, record.qualityDesc, record.qualityCheckResult, record.qualityCheckItems, record.qualityCheckReason, record.fourChildCheckResult, record.fourChildCheckItems, record.fourChildCheckReason, record.gameInteraction, record.gameInteractionDesc, record.positiveResponse, record.positiveResponseDesc, record.socialDevSupport, record.socialDevSupportDesc, record.otherInteractionObs, record.dailyHandover, record.parentCooperation, record.providerHealthSelf, record.visitorEval, record.visitorEvalReasons, record.visitorEvalOther, record.familyHealth, record.familyHealthReason, record.familyHealthDesc, record.familySupport, record.familySupportDesc, record.workImpactFamily, record.workImpactFamilyDesc, record.hasEmergencyDrill, record.emergencyDrill, record.emergencyDrillDesc, record.hasPendingFollowUp, record.pendingFollowUp, record.suggestedGuidance, record.safetyPropaganda, record.safetyPropagandaOther, record.generalPropaganda, record.generalPropagandaOther, record.providerAttitude, record.serviceNeeds, record.fieldGuidanceRecord, record.nextFollowUpFocus, record.isViolation, record.reviewResultDesc]);
 
   // Update time every second
   useEffect(() => {
@@ -127,10 +127,9 @@ export default function App() {
       "九、訪視狀況簡述", "十、收托幼兒狀況", "十一、托育環境", "十二、托育品質", 
       "十三、互動與社會行為", "十四、保親關係", "十五、托育人員現況", 
       "十六、緊急事件演練與抽問", "十七、待追蹤、改善事項", "十八、建議輔導事項", 
-      "十九、托育安全宣導事項", "二十、宣導事項", "二十一、督導（提醒）事項", 
-      "二十二、針對建議輔導態度", "二十三、反映需求/建議", "二十四、現場輔導紀錄", 
-      "二十五、輔導後態度/反應", "二十六、反映需求/建議", "二十七、下次輔導重點", 
-      "二十八、是否違反考核項目", "二十九、審查結果"
+      "十九、托育安全宣導事項", "二十、宣導事項", "二十一、現場輔導紀錄", 
+      "二十二、針對建議輔導態度", "二十三、反映需求/建議", "二十四、下次輔導重點", 
+      "二十五、是否違反考核項目"
     ];
 
     const observer = new IntersectionObserver(
@@ -289,7 +288,8 @@ export default function App() {
       String(now.getMonth() + 1).padStart(2, '0') + 
       String(now.getDate()).padStart(2, '0') + "_" +
       String(now.getHours()).padStart(2, '0') + 
-      String(now.getMinutes()).padStart(2, '0');
+      String(now.getMinutes()).padStart(2, '0') +
+      String(now.getSeconds()).padStart(2, '0');
 
     link.href = url;
     link.download = `撰寫紀錄_${record.providerName || '未命名'}_${timestamp}.json`;
@@ -363,8 +363,8 @@ export default function App() {
         hasIssues = record.envCheckResult === '不符合' || record.noSmokingResult === '不符合' || (record.envCheckItems && record.envCheckItems.length > 0);
         break;
       case "十二、托育品質":
-        isFilled = !!(record.routineCheck || record.qualityCheckResult || record.activities.length > 0 || record.mealPrep.length > 0 || record.dietQuality || record.mealSpace || record.mealWay || record.toyClean || record.envClean);
-        hasIssues = record.routineCheck === '不符合' || record.dietQuality === '不符合' || record.mealSpace === '不符合' || record.mealWay === '不符合' || record.qualityCheckResult === '不符合';
+        isFilled = !!(record.routineCheck || record.qualityCheckResult || record.fourChildCheckResult || record.activities.length > 0 || record.mealPrep.length > 0 || record.dietQuality || record.mealSpace || record.mealWay || record.toyClean || record.envClean);
+        hasIssues = record.routineCheck === '不符合' || record.dietQuality === '不符合' || record.mealSpace === '不符合' || record.mealWay === '不符合' || record.qualityCheckResult === '不符合' || record.fourChildCheckResult === '不符合';
         break;
       case "十三、互動與社會行為":
         isFilled = !!(record.gameInteraction || record.positiveResponse || record.socialDevSupport || record.otherInteractionObs);
@@ -378,7 +378,7 @@ export default function App() {
         hasIssues = record.visitorEval === '異常' || record.familyHealth === '不佳' || record.familySupport === '否' || record.workImpactFamily === '是';
         break;
       case "十六、緊急事件演練與抽問":
-        isFilled = !!(record.hasEmergencyDrill || record.emergencyDrill);
+        isFilled = !!(record.hasEmergencyDrill || record.emergencyDrillDesc);
         hasIssues = record.hasEmergencyDrill === '無';
         break;
       case "十七、待追蹤、改善事項":
@@ -393,8 +393,8 @@ export default function App() {
       case "二十、宣導事項":
         isFilled = record.generalPropaganda.length > 0;
         break;
-      case "二十一、督導（提醒）事項":
-        isFilled = !!record.supervisorNotes;
+      case "二十一、現場輔導紀錄":
+        isFilled = !!record.fieldGuidanceRecord;
         break;
       case "二十二、針對建議輔導態度":
         isFilled = !!record.providerAttitude;
@@ -402,24 +402,12 @@ export default function App() {
       case "二十三、反映需求/建議":
         isFilled = !!record.serviceNeeds;
         break;
-      case "二十四、現場輔導紀錄":
-        isFilled = !!record.fieldGuidanceRecord;
-        break;
-      case "二十五、輔導後態度/反應":
-        isFilled = !!record.guidanceAttitude;
-        break;
-      case "二十六、反映需求/建議":
-        isFilled = !!record.guidanceNeeds;
-        break;
-      case "二十七、下次輔導重點":
+      case "二十四、下次輔導重點":
         isFilled = !!record.nextFollowUpFocus;
         break;
-      case "二十八、是否違反考核項目":
+      case "二十五、是否違反考核項目":
         isFilled = !!record.isViolation;
         hasIssues = record.isViolation === '是';
-        break;
-      case "二十九、審查結果":
-        isFilled = !!record.reviewResult;
         break;
     }
 
@@ -615,10 +603,9 @@ export default function App() {
                   "九、訪視狀況簡述", "十、收托幼兒狀況", "十一、托育環境", "十二、托育品質", 
                   "十三、互動與社會行為", "十四、保親關係", "十五、托育人員現況", 
                   "十六、緊急事件演練與抽問", "十七、待追蹤、改善事項", "十八、建議輔導事項", 
-                  "十九、托育安全宣導事項", "二十、宣導事項", "二十一、督導（提醒）事項", 
-                  "二十二、針對建議輔導態度", "二十三、反映需求/建議", "二十四、現場輔導紀錄", 
-                  "二十五、輔導後態度/反應", "二十六、反映需求/建議", "二十七、下次輔導重點", 
-                  "二十八、是否違反考核項目", "二十九、審查結果"
+                  "十九、托育安全宣導事項", "二十、宣導事項", "二十一、現場輔導紀錄", 
+                  "二十二、針對建議輔導態度", "二十三、反映需求/建議", "二十四、下次輔導重點", 
+                  "二十五、是否違反考核項目"
                 ].map((title) => {
                   const { isFilled, hasIssues } = getSectionStatus(title);
                   return (
@@ -823,13 +810,46 @@ export default function App() {
                   <SelectField label="4. 確認托育地確實為全面禁菸場所" options={['符合', '不符合']} value={record.noSmokingResult} onChange={(v) => updateField('noSmokingResult', v)} />
                   {record.noSmokingResult === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.noSmokingDesc} onChange={(v) => updateField('noSmokingDesc', v)} />}
                 </div>
-                <TextAreaField label="環境狀況額外說明" value={record.envDesc} onChange={(v) => updateField('envDesc', v)} placeholder="請輸入額外說明..." />
+                <TextAreaField label="托育環境說明" value={record.envDesc} onChange={(v) => updateField('envDesc', v)} placeholder="請輸入額外說明..." />
               </div>
             </FormSection>
 
             {/* 十二、托育品質 */}
-            <FormSection title="十二、托育品質" icon={<CheckCircle2 className="w-5 h-5" />} borderColor="border-indigo-600" isOpen={openSections['quality']} onToggle={() => toggleSection('quality')} extraActions={<SectionActions sectionKeys={['routineCheck', 'routineDesc', 'activities', 'activitiesOther', 'mealPrep', 'mealPrepOther', 'dietQuality', 'dietQualityDesc', 'mealSpace', 'mealSpaceDesc', 'mealWay', 'mealWayDesc', 'mealCleanProcess', 'childCleanAfterMeal', 'toyClean', 'toyCleanOther', 'toyCleanDesc', 'envClean', 'envCleanOther', 'envCleanDesc', 'qualityCheckSummary', 'qualityDesc', 'qualityCheckResult', 'qualityCheckItems', 'qualityCheckReason']} title="托育品質" />}>
+            <FormSection title="十二、托育品質" icon={<CheckCircle2 className="w-5 h-5" />} borderColor="border-indigo-600" isOpen={openSections['quality']} onToggle={() => toggleSection('quality')} extraActions={<SectionActions sectionKeys={['routineCheck', 'routineDesc', 'routineOther', 'activities', 'activitiesOther', 'mealPrep', 'mealPrepOther', 'dietQuality', 'dietQualityDesc', 'dietQualityOther', 'mealSpace', 'mealSpaceDesc', 'mealSpaceOther', 'mealWay', 'mealWayDesc', 'mealWayOther', 'mealCleanProcess', 'childCleanAfterMeal', 'toyClean', 'toyCleanOther', 'toyCleanDesc', 'envClean', 'envCleanOther', 'envCleanDesc', 'qualityDesc', 'qualityCheckResult', 'qualityCheckItems', 'qualityCheckReason', 'fourChildCheckResult', 'fourChildCheckItems', 'fourChildCheckReason']} title="托育品質" />}>
               <div className="space-y-6">
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                  <SelectField label="1. 安排基本作息與活動時間" options={['符合', '不符合']} value={record.routineCheck} onChange={(v) => updateField('routineCheck', v)} />
+                  <TextAreaField label="現況及說明" value={record.routineOther} onChange={(v) => updateField('routineOther', v)} placeholder="請輸入說明..." />
+                  {record.routineCheck === '不符合' && <TextAreaField label="輔導措施說明" value={record.routineDesc} onChange={(v) => updateField('routineDesc', v)} />}
+                </div>
+                <MultiSelectField label="2. 學習與提供適齡適性的教玩具" options={['說故事', '聽音樂', '戶外散步', '玩教玩具', '聊天', '嬰幼兒按摩', '大肌肉活動', '小肌肉活動', '自由探索']} values={record.activities} onChange={(v) => updateField('activities', v)} allowOther otherValue={record.activitiesOther} onOtherChange={(v) => updateField('activitiesOther', v)} />
+                <MultiSelectField label="3. 備餐方式、時間" options={['前一晚製作', '早上收托兒尚未開始托育時', '利用收托兒休息時間', '請家人幫忙看顧時', '家長自行準備']} values={record.mealPrep} onChange={(v) => updateField('mealPrep', v)} allowOther otherValue={record.mealPrepOther} onOtherChange={(v) => updateField('mealPrepOther', v)} />
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                  <SelectField label="4. 依兒童年齡提供多樣化飲食" options={['符合', '不符合']} value={record.dietQuality} onChange={(v) => updateField('dietQuality', v)} />
+                  <TextAreaField label="現況及說明" value={record.dietQualityOther} onChange={(v) => updateField('dietQualityOther', v)} placeholder="請輸入說明..." />
+                </div>
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                  <SelectField label="5.1 用餐空間、用品合宜、足夠" options={['符合', '不符合']} value={record.mealSpace} onChange={(v) => updateField('mealSpace', v)} />
+                  <TextAreaField label="現況及說明" value={record.mealSpaceOther} onChange={(v) => updateField('mealSpaceOther', v)} placeholder="請輸入說明..." />
+                </div>
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                  <SelectField label="5.2 適齡的餵食或用餐方式" options={['符合', '不符合']} value={record.mealWay} onChange={(v) => updateField('mealWay', v)} />
+                  <TextAreaField label="現況及說明" value={record.mealWayOther} onChange={(v) => updateField('mealWayOther', v)} placeholder="請輸入說明..." />
+                </div>
+                <InputField label="5.3 用餐完環境清潔方式、流程" value={record.mealCleanProcess} onChange={(v) => updateField('mealCleanProcess', v)} />
+                <InputField label="5.4 用餐完幼兒清潔" value={record.childCleanAfterMeal} onChange={(v) => updateField('childCleanAfterMeal', v)} hint="擦臉、刷牙等" />
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                    <SelectField label="6.1 教玩具、寢具清潔" options={['符合（每天定期消毒）', '符合（每週定期消毒）', '不符合']} value={record.toyClean} onChange={(v) => updateField('toyClean', v)} allowOther otherValue={record.toyCleanOther} onOtherChange={(v) => updateField('toyCleanOther', v)} />
+                    {record.toyClean === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.toyCleanDesc} onChange={(v) => updateField('toyCleanDesc', v)} />}
+                  </div>
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+                    <SelectField label="6.2 托育環境衛生整潔" options={['符合（定期消毒打掃）', '不符合']} value={record.envClean} onChange={(v) => updateField('envClean', v)} allowOther otherValue={record.envCleanOther} onOtherChange={(v) => updateField('envCleanOther', v)} />
+                    {record.envClean === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.envCleanDesc} onChange={(v) => updateField('envCleanDesc', v)} />}
+                  </div>
+                </div>
+
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
                   <SelectField label="照顧品質評估指標檢核" options={['符合', '不符合']} value={record.qualityCheckResult} onChange={(v) => updateField('qualityCheckResult', v)} />
                   {record.qualityCheckResult === '不符合' && (
@@ -850,39 +870,52 @@ export default function App() {
                     </div>
                   )}
                 </div>
+
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="1. 安排基本作息與活動時間" options={['符合', '不符合']} value={record.routineCheck} onChange={(v) => updateField('routineCheck', v)} />
-                  {record.routineCheck === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.routineDesc} onChange={(v) => updateField('routineDesc', v)} />}
+                  <SelectField label="居家托育人員收托4名兒童訪視檢核表" options={['符合', '不符合']} value={record.fourChildCheckResult} onChange={(v) => updateField('fourChildCheckResult', v)} />
+                  {record.fourChildCheckResult === '不符合' && (
+                    <div className="space-y-4 pt-2">
+                      <TextAreaField 
+                        label="不符合原因說明" 
+                        value={record.fourChildCheckReason} 
+                        onChange={(v) => updateField('fourChildCheckReason', v)} 
+                        placeholder="請輸入不符合原因之具體說明..."
+                      />
+                      <div className="space-y-4 bg-white p-4 rounded-lg border border-slate-200">
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">收托4名兒童訪視檢核指標 (請勾選不符合項目)</label>
+                        {FOUR_CHILD_CHECK_INDICATORS.map((group, idx) => (
+                          <div key={idx} className="space-y-2">
+                            <h4 className="text-sm font-bold text-brand">{group.category}</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {group.items.map((item) => (
+                                <button
+                                  key={item}
+                                  onClick={() => {
+                                    const vals = record.fourChildCheckItems;
+                                    if (vals.includes(item)) {
+                                      updateField('fourChildCheckItems', vals.filter(v => v !== item));
+                                    } else {
+                                      updateField('fourChildCheckItems', [...vals, item]);
+                                    }
+                                  }}
+                                  className={`px-4 py-2 rounded-xl border-2 text-sm font-bold transition-all cursor-pointer text-left ${
+                                    record.fourChildCheckItems.includes(item) 
+                                    ? 'bg-brand border-brand text-white shadow-md' 
+                                    : 'bg-white border-gray-100 text-gray-500 hover:border-brand-light'
+                                  }`}
+                                >
+                                  {item}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <MultiSelectField label="2. 學習與提供適齡適性的教玩具" options={['說故事', '聽音樂', '戶外散步', '玩教玩具', '聊天', '嬰幼兒按摩', '大肌肉活動', '小肌肉活動', '自由探索']} values={record.activities} onChange={(v) => updateField('activities', v)} allowOther otherValue={record.activitiesOther} onOtherChange={(v) => updateField('activitiesOther', v)} />
-                <MultiSelectField label="3. 備餐方式、時間" options={['前一晚製作', '早上收托兒尚未開始托育時', '利用收托兒休息時間', '請家人幫忙看顧時', '家長自行準備']} values={record.mealPrep} onChange={(v) => updateField('mealPrep', v)} allowOther otherValue={record.mealPrepOther} onOtherChange={(v) => updateField('mealPrepOther', v)} />
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="4. 依兒童年齡提供多樣化飲食" options={['符合', '不符合']} value={record.dietQuality} onChange={(v) => updateField('dietQuality', v)} />
-                  {record.dietQuality === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.dietQualityDesc} onChange={(v) => updateField('dietQualityDesc', v)} />}
-                </div>
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="5.1 用餐空間、用品合宜、足夠" options={['符合', '不符合']} value={record.mealSpace} onChange={(v) => updateField('mealSpace', v)} />
-                  {record.mealSpace === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.mealSpaceDesc} onChange={(v) => updateField('mealSpaceDesc', v)} />}
-                </div>
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="5.2 適齡的餵食或用餐方式" options={['符合', '不符合']} value={record.mealWay} onChange={(v) => updateField('mealWay', v)} />
-                  {record.mealWay === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.mealWayDesc} onChange={(v) => updateField('mealWayDesc', v)} />}
-                </div>
-                <InputField label="5.3 用餐完環境清潔方式、流程" value={record.mealCleanProcess} onChange={(v) => updateField('mealCleanProcess', v)} />
-                <InputField label="5.4 用餐完幼兒清潔" value={record.childCleanAfterMeal} onChange={(v) => updateField('childCleanAfterMeal', v)} hint="擦臉、刷牙等" />
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                    <SelectField label="6.1 教玩具、寢具清潔" options={['符合（每天定期消毒）', '符合（每週定期消毒）', '不符合']} value={record.toyClean} onChange={(v) => updateField('toyClean', v)} allowOther otherValue={record.toyCleanOther} onOtherChange={(v) => updateField('toyCleanOther', v)} />
-                    {record.toyClean === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.toyCleanDesc} onChange={(v) => updateField('toyCleanDesc', v)} />}
-                  </div>
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                    <SelectField label="6.2 托育環境衛生整潔" options={['符合（定期消毒打掃）', '不符合']} value={record.envClean} onChange={(v) => updateField('envClean', v)} allowOther otherValue={record.envCleanOther} onOtherChange={(v) => updateField('envCleanOther', v)} />
-                    {record.envClean === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.envCleanDesc} onChange={(v) => updateField('envCleanDesc', v)} />}
-                  </div>
-                </div>
-                <TextAreaField label="7. 照顧品質評估指標檢核總結" value={record.qualityCheckSummary} onChange={(v) => updateField('qualityCheckSummary', v)} />
-                <TextAreaField label="品質狀況額外說明" value={record.qualityDesc} onChange={(v) => updateField('qualityDesc', v)} placeholder="請輸入額外說明..." />
+
+                <TextAreaField label="托育品質說明" value={record.qualityDesc} onChange={(v) => updateField('qualityDesc', v)} placeholder="請輸入額外說明..." />
               </div>
             </FormSection>
 
@@ -912,7 +945,7 @@ export default function App() {
               </div>
             </FormSection>
 
-            <FormSection title="十五、托育人員現況" icon={<User className="w-5 h-5" />} borderColor="border-orange-400" isOpen={openSections['providerStatus']} onToggle={() => toggleSection('providerStatus')} extraActions={<SectionActions sectionKeys={['providerHealthSelf', 'visitorEval', 'visitorEvalReasons', 'visitorEvalOther', 'familyHealth', 'familyHealthReason', 'familySupport', 'familySupportDesc', 'workImpactFamily', 'workImpactFamilyDesc']} title="托育人員現況" />}>
+            <FormSection title="十五、托育人員現況" icon={<User className="w-5 h-5" />} borderColor="border-orange-400" isOpen={openSections['providerStatus']} onToggle={() => toggleSection('providerStatus')} extraActions={<SectionActions sectionKeys={['providerHealthSelf', 'visitorEval', 'visitorEvalReasons', 'visitorEvalOther', 'familyHealth', 'familyHealthReason', 'familyHealthDesc', 'familySupport', 'familySupportDesc', 'workImpactFamily', 'workImpactFamilyDesc']} title="托育人員現況" />}>
               <div className="space-y-6">
                 <TextAreaField label="十五-1. 托育人員自述健康狀況" value={record.providerHealthSelf} onChange={(v) => updateField('providerHealthSelf', v)} />
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
@@ -920,26 +953,24 @@ export default function App() {
                   {record.visitorEval === '異常' && <MultiSelectField label="異常原因" options={['呈現焦慮與壓力感', '呈現衝動與控制力較差', '表情冷漠或社交退縮', '有獨留兒童在家之風險', '同住家人關係衝突']} values={record.visitorEvalReasons} onChange={(v) => updateField('visitorEvalReasons', v)} allowOther otherValue={record.visitorEvalOther} onOtherChange={(v) => updateField('visitorEvalOther', v)} />}
                 </div>
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="十五-3. 同住成員身心狀況" options={['健康', '尚可', '無同住成員', '訪視未遇家庭成員', '不佳']} value={record.familyHealth} onChange={(v) => updateField('familyHealth', v)} />
-                  {record.familyHealth === '不佳' && <TextAreaField label="不佳原因" value={record.familyHealthReason} onChange={(v) => updateField('familyHealthReason', v)} />}
+                  <SelectField label="十五-3. 同住成員身心狀況" options={['無明顯異常', '尚可', '無同住成員', '訪視未遇家庭成員', '不佳']} value={record.familyHealth} onChange={(v) => updateField('familyHealth', v)} />
+                  <TextAreaField label="說明" value={record.familyHealthDesc} onChange={(v) => updateField('familyHealthDesc', v)} placeholder="請輸入說明..." />
                 </div>
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
                   <SelectField label="十五-4. 同住成員是否支持" options={['是', '否']} value={record.familySupport} onChange={(v) => updateField('familySupport', v)} />
-                  {record.familySupport === '否' && <TextAreaField label="說明" value={record.familySupportDesc} onChange={(v) => updateField('familySupportDesc', v)} />}
+                  <TextAreaField label="說明" value={record.familySupportDesc} onChange={(v) => updateField('familySupportDesc', v)} placeholder="請輸入說明..." />
                 </div>
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
                   <SelectField label="十五-5. 托育工作是否影響家庭" options={['是', '否']} value={record.workImpactFamily} onChange={(v) => updateField('workImpactFamily', v)} />
-                  {record.workImpactFamily === '是' && <TextAreaField label="說明" value={record.workImpactFamilyDesc} onChange={(v) => updateField('workImpactFamilyDesc', v)} />}
+                  <TextAreaField label="說明" value={record.workImpactFamilyDesc} onChange={(v) => updateField('workImpactFamilyDesc', v)} placeholder="請輸入說明..." />
                 </div>
               </div>
             </FormSection>
 
             {/* 十六 - 二十六 */}
-            <FormSection title="十六、緊急事件演練與抽問" icon={<MessageSquare className="w-5 h-5" />} borderColor="border-slate-600" isOpen={openSections['emergency']} onToggle={() => toggleSection('emergency')} extraActions={<SectionActions sectionKeys={['hasEmergencyDrill', 'emergencyDrill']} title="緊急事件演練與抽問" />}>
+            <FormSection title="十六、緊急事件演練與抽問" icon={<MessageSquare className="w-5 h-5" />} borderColor="border-slate-600" isOpen={openSections['emergency']} onToggle={() => toggleSection('emergency')} extraActions={<SectionActions sectionKeys={['hasEmergencyDrill', 'emergencyDrill', 'emergencyDrillDesc']} title="緊急事件演練與抽問" />}>
               <SelectField label="是否有進行緊急事件演練？" options={['有', '無']} value={record.hasEmergencyDrill} onChange={(v) => updateField('hasEmergencyDrill', v)} />
-              {record.hasEmergencyDrill === '有' && (
-                <TextAreaField label="演練與抽問狀況說明" value={record.emergencyDrill} onChange={(v) => updateField('emergencyDrill', v)} />
-              )}
+              <TextAreaField label="演練與抽問狀況說明" value={record.emergencyDrillDesc} onChange={(v) => updateField('emergencyDrillDesc', v)} placeholder="請輸入說明..." />
             </FormSection>
 
             <FormSection title="十七、待追蹤、改善事項" icon={<AlertCircle className="w-5 h-5" />} borderColor="border-red-600" isOpen={openSections['pending']} onToggle={() => toggleSection('pending')} extraActions={<SectionActions sectionKeys={['hasPendingFollowUp', 'pendingFollowUp']} title="待追蹤、改善事項" />}>
@@ -958,12 +989,13 @@ export default function App() {
                 label="十九、托育安全宣導事項" 
                 options={[
                   '宣導五招安心睡', 
-                  '不應運用任何工具長時間約束幼兒活動', 
-                  '照顧幼兒時進行安全看視，並注意幼兒安全', 
-                  '宣導托育人員應留意直徑3.17公分的物品', 
+                  '不應運用任何工具長時間約束幼兒活動，提醒不應長時間使用高腳餐椅、嬰兒床、遊戲床約束幼兒活動', 
+                  '照顧幼兒時應安全看視，注意幼兒安全，並留意幼兒互動時有無咬、抓行為，避免幼兒受傷', 
+                  '宣導托育人員應留意直徑3.17公分的物品並收納在幼兒無法碰觸之處以避免窒息，如玩具、零錢等', 
                   '托兒使用大型遊戲設備時，請托育人員務必陪同', 
                   '宣導嬰兒床上不應吊掛任何毛巾、衣物', 
-                  '高腳餐椅使用安全'
+                  '高腳餐椅使用安全：請確保幼兒不會攀爬，且具穩固性，並妥善使用安全帶。',
+                  '提醒托育人員應注意食用熱水、熱湯、使用熱水的安全，避免幼兒燙傷'
                 ]} 
                 values={record.safetyPropaganda} 
                 onChange={(v) => updateField('safetyPropaganda', v)} 
@@ -977,16 +1009,18 @@ export default function App() {
               <MultiSelectField 
                 label="二十、宣導事項" 
                 options={[
-                  '不得進行任何形式的體罰、不當管教', 
-                  '收托人數宣導', 
-                  '應專心托育', 
-                  '托育人員不得獨留幼兒在托育地', 
-                  '宣導傳染病、意外事件的緊急處理程序', 
-                  '宣導新收托、終托、收托異動通報責任', 
-                  '宣導托育人員應有適當舒壓管道', 
-                  '宣導托育人員應留意幼兒外觀是否有受傷狀況', 
-                  '寶寶日誌應每日記錄', 
-                  '托育時遇到緊急事件處理程序'
+                  '不得進行任何形式的體罰、不當管教：提醒托育人員應正向管教(包括身教、言教)，不打罵、不懲罰、不體罰，即使家長授權同意都是不可以。（不合適的行為包含，罰站、恐嚇孩子不乖就要打手手、叫孩子閉嘴、打罵孩子）', 
+                  '收托人數宣導：如有原幼兒增加過夜、全日托，應先與中心聯繫，確認收托人數未超收。', 
+                  '應專心托育：托育人員於收托時間勿擅離托育地(不得於托育時間將幼兒委託家人照顧)，如有需外出，建議由家人處理或運用非托育時間或向家長請假。', 
+                  '托育人員不得獨留幼兒在托育地，即使是領掛號信、開一樓大門…等，暫時離開一下也不可以。如獨留幼兒將違反兒少權法第51條，如有違規將會影響準公身分、且被裁罰；如因此幼兒發生意外事件將有後續刑責。', 
+                  '宣導傳染病、意外事件的緊急處理程序、通報中心之責任。', 
+                  '傳染疾病盛行，請務必加強托育地消毒與勤洗手、注意幼兒及托育人員健康。', 
+                  '宣導新收托、終托、收托異動應於異動起始日 7日內通報中心。', 
+                  '宣導托育人員應有適當紓壓管道，並提醒幼兒照顧時明顯有壓力或情緒，請聯絡中心，中心可提供相關支持、及相關資源。', 
+                  '宣導托育人員應正向管教，留意同住家人與幼兒的互動，不得使用任何不當的照顧、管教方式。', 
+                  '宣導托育人員應留意幼兒外觀是否有受傷狀況，無論傷害是否在托育地造成，均須通報中心，中心會關懷後續與處理。',
+                  '寶寶日誌應每日以紙本、電子APP、LINE(記事本)等多元形式記錄，內容需有基本照顧事項(含時間、頻率及量等):1.飲食(喝奶、副食品)2.睡眠3.排便(換尿布、大小便)4.服藥(有托藥應敘明)及聯絡事項(受托幼兒活動情形及特殊事件等) 。',
+                  '托育時遇到緊急事件，請托育人員第一時間務必撥打119並配合119進行緊急處置，在安全狀況下聯絡家長、並回報中心。'
                 ]} 
                 values={record.generalPropaganda} 
                 onChange={(v) => updateField('generalPropaganda', v)} 
@@ -996,8 +1030,8 @@ export default function App() {
               />
             </FormSection>
 
-            <FormSection title="二十一、督導（提醒）事項" icon={<AlertCircle className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['supervisor']} onToggle={() => toggleSection('supervisor')} extraActions={<SectionActions sectionKeys={['supervisorNotes']} title="督導（提醒）事項" />}>
-              <TextAreaField label="二十一、督導（提醒）事項" value={record.supervisorNotes} onChange={(v) => updateField('supervisorNotes', v)} />
+            <FormSection title="二十一、現場輔導紀錄" icon={<FileText className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['field']} onToggle={() => toggleSection('field')} extraActions={<SectionActions sectionKeys={['fieldGuidanceRecord']} title="現場輔導紀錄" />}>
+              <TextAreaField label="二十一、現場輔導紀錄" value={record.fieldGuidanceRecord} onChange={(v) => updateField('fieldGuidanceRecord', v)} />
             </FormSection>
 
             <FormSection title="二十二、針對建議輔導後托育人員態度" icon={<MessageSquare className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['attitude']} onToggle={() => toggleSection('attitude')} extraActions={<SectionActions sectionKeys={['providerAttitude']} title="針對建議輔導後托育人員態度" />}>
@@ -1008,33 +1042,17 @@ export default function App() {
               <TextAreaField label="二十三、托育人員反映需求/建議" value={record.serviceNeeds} onChange={(v) => updateField('serviceNeeds', v)} />
             </FormSection>
 
-            <FormSection title="二十四、現場輔導紀錄" icon={<FileText className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['field']} onToggle={() => toggleSection('field')} extraActions={<SectionActions sectionKeys={['fieldGuidanceRecord']} title="現場輔導紀錄" />}>
-              <TextAreaField label="二十四、現場輔導紀錄" value={record.fieldGuidanceRecord} onChange={(v) => updateField('fieldGuidanceRecord', v)} />
+            <FormSection title="二十四、下次輔導重點" icon={<AlertCircle className="w-5 h-5" />} borderColor="border-slate-900" isOpen={openSections['nextFocus']} onToggle={() => toggleSection('nextFocus')} extraActions={<SectionActions sectionKeys={['nextFollowUpFocus']} title="下次輔導重點" />}>
+              <TextAreaField label="二十四、下次輔導重點" value={record.nextFollowUpFocus} onChange={(v) => updateField('nextFollowUpFocus', v)} hint="系統會自動偵測異常項並列入追蹤" />
             </FormSection>
 
-            <FormSection title="二十五、輔導後態度/反應" icon={<MessageSquare className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['guidanceAttitude']} onToggle={() => toggleSection('guidanceAttitude')} extraActions={<SectionActions sectionKeys={['guidanceAttitude']} title="輔導後態度/反應" />}>
-              <TextAreaField label="二十五、輔導後態度/反應" value={record.guidanceAttitude} onChange={(v) => updateField('guidanceAttitude', v)} />
-            </FormSection>
-
-            <FormSection title="二十六、反映需求/建議" icon={<Info className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['guidanceNeeds']} onToggle={() => toggleSection('guidanceNeeds')} extraActions={<SectionActions sectionKeys={['guidanceNeeds']} title="反映需求/建議" />}>
-              <TextAreaField label="二十六、反映需求/建議" value={record.guidanceNeeds} onChange={(v) => updateField('guidanceNeeds', v)} />
-            </FormSection>
-
-            <FormSection title="二十七、下次輔導重點" icon={<AlertCircle className="w-5 h-5" />} borderColor="border-slate-900" isOpen={openSections['nextFocus']} onToggle={() => toggleSection('nextFocus')} extraActions={<SectionActions sectionKeys={['nextFollowUpFocus']} title="下次輔導重點" />}>
-              <TextAreaField label="二十七、下次輔導重點" value={record.nextFollowUpFocus} onChange={(v) => updateField('nextFollowUpFocus', v)} hint="系統會自動偵測異常項並列入追蹤" />
-            </FormSection>
-
-            <FormSection title="二十八、是否違反考核項目" icon={<ShieldCheck className="w-5 h-5" />} borderColor="border-slate-900" isOpen={openSections['violation']} onToggle={() => toggleSection('violation')} extraActions={<SectionActions sectionKeys={['isViolation', 'reviewResultDesc']} title="是否違反考核項目" />}>
+            <FormSection title="二十五、是否違反考核項目" icon={<ShieldCheck className="w-5 h-5" />} borderColor="border-slate-900" isOpen={openSections['violation']} onToggle={() => toggleSection('violation')} extraActions={<SectionActions sectionKeys={['isViolation', 'reviewResultDesc']} title="是否違反考核項目" />}>
               <div className="space-y-4">
-                <SelectField label="二十八、是否違反考核項目" options={['是', '否']} value={record.isViolation} onChange={(v) => updateField('isViolation', v)} />
-                {record.isViolation === '否' && (
+                <SelectField label="二十五、是否違反考核項目" options={['是', '否']} value={record.isViolation} onChange={(v) => updateField('isViolation', v)} />
+                {record.isViolation === '是' && (
                   <TextAreaField label="違反項目說明" value={record.reviewResultDesc} onChange={(v) => updateField('reviewResultDesc', v)} placeholder="請輸入說明..." />
                 )}
               </div>
-            </FormSection>
-
-            <FormSection title="二十九、審查結果" icon={<CheckCircle2 className="w-5 h-5" />} borderColor="border-slate-900" isOpen={openSections['review']} onToggle={() => toggleSection('review')} extraActions={<SectionActions sectionKeys={['reviewResult']} title="審查結果" />}>
-              <TextAreaField label="二十九、審查結果" value={record.reviewResult} onChange={(v) => updateField('reviewResult', v)} />
             </FormSection>
 
           </div>

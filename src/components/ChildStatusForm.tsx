@@ -125,25 +125,22 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
               <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-100">
                 <SelectField label="身體外觀" options={['無明顯異常', '異常']} value={s.appearance} onChange={(v) => updateStatus(index, 'appearance', v)} />
                 {s.appearance === '異常' && (
-                  <>
-                    <MultiSelectField 
-                      label="異常狀況" 
-                      options={[
-                        '瘀青', '抓傷或擦傷', '頭眼腹外傷', 
-                        '體重過輕或與身高不成比例，不符合兒童生長發展曲線',
-                        '身體重要部位如：頭、腦、頸部、耳朵、軀幹，出現不尋常傷痕，或新舊傷夾雜',
-                        '兒童經常性或反覆受傷', '收傷應就醫而未就醫', '穿著不合身或不合時令',
-                        '不願與他人互動、恐懼、退縮、焦慮', '精神恍惚、缺少微笑、沈默、沒有情緒表現',
-                        '表情木然或不悅、自傷行為、搖晃身體'
-                      ]} 
-                      values={s.appearanceIssues} 
-                      onChange={(v) => updateStatus(index, 'appearanceIssues', v)}
-                      allowOther
-                      otherValue={s.appearanceOther}
-                      onOtherChange={(v) => updateStatus(index, 'appearanceOther', v)}
-                    />
-                    <TextAreaField label="異常說明" value={s.appearanceDesc} onChange={(v) => updateStatus(index, 'appearanceDesc', v)} />
-                  </>
+                  <MultiSelectField 
+                    label="異常狀況" 
+                    options={[
+                      '瘀青', '抓傷或擦傷', '頭眼腹外傷', 
+                      '體重過輕或與身高不成比例，不符合兒童生長發展曲線',
+                      '身體重要部位如：頭、腦、頸部、耳朵、軀幹，出現不尋常傷痕，或新舊傷夾雜',
+                      '兒童經常性或反覆受傷', '收傷應就醫而未就醫', '穿著不合身或不合時令',
+                      '不願與他人互動、恐懼、退縮、焦慮', '精神恍惚、缺少微笑、沈默、沒有情緒表現',
+                      '表情木然或不悅、自傷行為、搖晃身體'
+                    ]} 
+                    values={s.appearanceIssues} 
+                    onChange={(v) => updateStatus(index, 'appearanceIssues', v)}
+                    allowOther
+                    otherValue={s.appearanceOther}
+                    onOtherChange={(v) => updateStatus(index, 'appearanceOther', v)}
+                  />
                 )}
                 <TextAreaField label="身體外觀詳細說明" value={s.appearanceDetail} onChange={(v) => updateStatus(index, 'appearanceDetail', v)} placeholder="請輸入詳細說明..." />
               </div>
