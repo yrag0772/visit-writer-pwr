@@ -12,9 +12,9 @@ export const generateVisitReport = (record: VisitRecord): string => {
   if (record.mealWay === '不符合') followUpItems.push({ target: '托育品質', label: '餵食或用餐方式', status: '不符合' });
   if (record.toyClean === '不符合') followUpItems.push({ target: '托育品質', label: '教玩具、寢具清潔', status: '不符合' });
   if (record.envClean === '不符合') followUpItems.push({ target: '托育品質', label: '環境衛生整潔', status: '不符合' });
-  if (record.gameInteraction === '否') followUpItems.push({ target: '互動與社會行為', label: '經常進行遊戲互動', status: '否' });
-  if (record.positiveResponse === '否') followUpItems.push({ target: '互動與社會行為', label: '敏銳、正向、溫暖回應', status: '否' });
-  if (record.socialDevSupport === '否') followUpItems.push({ target: '互動與社會行為', label: '協助促進社會發展', status: '否' });
+  if (record.gameInteraction === '否') followUpItems.push({ target: '托育人員與托兒間互動與社會行為', label: '能與幼兒經常進行遊戲互動', status: '否' });
+  if (record.positiveResponse === '否') followUpItems.push({ target: '托育人員與托兒間互動與社會行為', label: '能敏銳、正向、溫暖親切的回應幼兒', status: '否' });
+  if (record.socialDevSupport === '否') followUpItems.push({ target: '托育人員與托兒間互動與社會行為', label: '能藉由對幼兒間互動和合作的協助來促進其社會發展', status: '否' });
   if (record.visitorEval === '異常') followUpItems.push({ target: '托育人員現況', label: '訪員評估', status: '異常' });
   if (record.familyHealth === '不佳') followUpItems.push({ target: '托育人員現況', label: '同住成員身心狀況', status: '不佳' });
   if (record.familySupport === '否') followUpItems.push({ target: '托育人員現況', label: '同住成員是否支持', status: '否' });
@@ -155,11 +155,12 @@ export const generateVisitReport = (record: VisitRecord): string => {
 
   const visitTypeInfo = [
     record.serviceType ? `服務類型：${record.serviceType}` : '',
-    record.visitCategories.length > 0 ? `類別：${record.visitCategories.join('、')}` : '',
+    record.visitCategories.length > 0 ? `類別：${record.visitCategories.map(cat => cat === '初次訪視' && record.initialVisitCount ? `${cat}(第${record.initialVisitCount}次初訪)` : cat).join('、')}` : '',
     record.visitCategories.includes('新收托訪視') && record.newChildName ? `新收托幼兒：${record.newChildName}` : '',
     record.visitCategories.includes('加強訪視') && record.reinforceReason ? `加強原因：${record.reinforceReason}` : '',
     record.annualVisitCount ? `年度應訪：${record.annualVisitCount} 次` : '',
-    record.currentVisitCount ? `本次為第 ${record.currentVisitCount} 次` : ''
+    record.currentVisitCount ? `本次為第 ${record.currentVisitCount} 次` : '',
+    record.visitCountDesc || ''
   ].filter(Boolean).join(' / ');
 
   const checkInfo = [
@@ -204,9 +205,9 @@ export const generateVisitReport = (record: VisitRecord): string => {
   ].filter(Boolean).join('<br/>');
 
   const interactionInfo = [
-    record.gameInteraction ? `遊戲互動：${record.gameInteraction}${record.gameInteraction === '否' ? ` (說明：${record.gameInteractionDesc})` : ''}` : '',
-    record.positiveResponse ? `正向回應：${record.positiveResponse}${record.positiveResponse === '否' ? ` (說明：${record.positiveResponseDesc})` : ''}` : '',
-    record.socialDevSupport ? `社會發展協助：${record.socialDevSupport}${record.socialDevSupport === '否' ? ` (說明：${record.socialDevSupportDesc})` : ''}` : '',
+    record.gameInteraction ? `能與幼兒經常進行遊戲互動：${record.gameInteraction}${record.gameInteraction === '否' ? ` (說明：${record.gameInteractionDesc})` : ''}` : '',
+    record.positiveResponse ? `能敏銳、正向、溫暖親切的回應幼兒：${record.positiveResponse}${record.positiveResponse === '否' ? ` (說明：${record.positiveResponseDesc})` : ''}` : '',
+    record.socialDevSupport ? `能藉由對幼兒間互動和合作的協助來促進其社會發展：${record.socialDevSupport}${record.socialDevSupport === '否' ? ` (說明：${record.socialDevSupportDesc})` : ''}` : '',
     record.otherInteractionObs ? `其他觀察：<br/>${nl2br(record.otherInteractionObs)}` : ''
   ].filter(Boolean).join('<br/>');
 
@@ -257,7 +258,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
       ${renderSection('收托幼兒狀況', childStatusReports, true)}
       ${renderSection('托育環境', envInfo, true)}
       ${renderSection('托育品質', qualityInfo, true)}
-      ${renderSection('互動與社會行為', interactionInfo, true)}
+      ${renderSection('托育人員與托兒間互動與社會行為', interactionInfo, true)}
       ${renderSection('保親關係', relationshipInfo, true)}
       ${renderSection('托育人員現況', providerStatusInfo, true)}
       ${renderSection('緊急事件演練與抽問', emergencyInfo, true)}

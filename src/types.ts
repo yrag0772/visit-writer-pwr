@@ -99,8 +99,10 @@ export interface VisitRecord {
   visitCategories: VisitCategory[];
   newChildName: string; // if 新收托訪視
   reinforceReason: string; // if 加強訪視
+  initialVisitCount: string; // if 初次訪視 (1 to 20)
   annualVisitCount: string;
   currentVisitCount: string;
+  visitCountDesc: string; 
   isJoint: YesNo;
   jointProvider1Name: string;
   jointProvider1Children: string;
@@ -307,8 +309,10 @@ export const initialRecord: VisitRecord = {
   visitCategories: [],
   newChildName: '',
   reinforceReason: '',
+  initialVisitCount: '',
   annualVisitCount: '',
   currentVisitCount: '',
+  visitCountDesc: '',
   isJoint: '',
   jointProvider1Name: '',
   jointProvider1Children: '',

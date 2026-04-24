@@ -111,7 +111,7 @@ export default function App() {
       const content = generateVisitReport(record);
       updateField('fullContent', content);
     }
-  }, [autoSync, record.providerName, record.providerNo, record.providerId, record.visitMethod, record.visitMethodOther, record.visitDate, record.visitTime, record.visitorName, record.hasChildren, record.children, record.serviceType, record.visitCategories, record.newChildName, record.reinforceReason, record.annualVisitCount, record.currentVisitCount, record.isJoint, record.jointProvider1Name, record.jointProvider1Children, record.jointProvider2Name, record.jointProvider2Children, record.prevFollowUp, record.currentVisitFocus, record.unitName, record.subsidyChildCount, record.subsidyChildNames, record.hasNoSubsidyChild, record.noSubsidyInfo, record.actualChildCount, record.siteCheckResult, record.siteCheckReason, record.feeCheckResult, record.feeCheckReason, record.feeDetails, record.matchNeeds, record.visitStatusDesc, record.childEnrollmentStatus, record.childStatuses, record.envCheckResult, record.envCheckReason, record.envFacilities, record.envFacilitiesOther, record.envComfort, record.envComfortOther, record.noSmokingResult, record.noSmokingDesc, record.envDesc, record.envCheckItems, record.routineCheck, record.routineDesc, record.routineOther, record.activities, record.activitiesOther, record.mealPrep, record.mealPrepOther, record.dietQuality, record.dietQualityDesc, record.dietQualityOther, record.mealSpace, record.mealSpaceDesc, record.mealSpaceOther, record.mealWay, record.mealWayDesc, record.mealWayOther, record.mealCleanProcess, record.childCleanAfterMeal, record.toyClean, record.toyCleanOther, record.toyCleanDesc, record.envClean, record.envCleanOther, record.envCleanDesc, record.qualityDesc, record.qualityCheckResult, record.qualityCheckItems, record.qualityCheckReason, record.fourChildCheckResult, record.fourChildCheckItems, record.fourChildCheckReason, record.gameInteraction, record.gameInteractionDesc, record.positiveResponse, record.positiveResponseDesc, record.socialDevSupport, record.socialDevSupportDesc, record.otherInteractionObs, record.dailyHandover, record.parentCooperation, record.providerHealthSelf, record.visitorEval, record.visitorEvalReasons, record.visitorEvalOther, record.familyHealth, record.familyHealthReason, record.familyHealthDesc, record.familySupport, record.familySupportDesc, record.workImpactFamily, record.workImpactFamilyDesc, record.hasEmergencyDrill, record.emergencyDrill, record.emergencyDrillDesc, record.hasPendingFollowUp, record.pendingFollowUp, record.suggestedGuidance, record.safetyPropaganda, record.safetyPropagandaOther, record.generalPropaganda, record.generalPropagandaOther, record.providerAttitude, record.serviceNeeds, record.fieldGuidanceRecord, record.nextFollowUpFocus, record.isViolation, record.reviewResultDesc]);
+  }, [autoSync, record.providerName, record.providerNo, record.providerId, record.visitMethod, record.visitMethodOther, record.visitDate, record.visitTime, record.visitorName, record.hasChildren, record.children, record.serviceType, record.visitCategories, record.initialVisitCount, record.newChildName, record.reinforceReason, record.annualVisitCount, record.currentVisitCount, record.visitCountDesc, record.isJoint, record.jointProvider1Name, record.jointProvider1Children, record.jointProvider2Name, record.jointProvider2Children, record.prevFollowUp, record.currentVisitFocus, record.unitName, record.subsidyChildCount, record.subsidyChildNames, record.hasNoSubsidyChild, record.noSubsidyInfo, record.actualChildCount, record.siteCheckResult, record.siteCheckReason, record.feeCheckResult, record.feeCheckReason, record.feeDetails, record.matchNeeds, record.visitStatusDesc, record.childEnrollmentStatus, record.childStatuses, record.envCheckResult, record.envCheckReason, record.envFacilities, record.envFacilitiesOther, record.envComfort, record.envComfortOther, record.noSmokingResult, record.noSmokingDesc, record.envDesc, record.envCheckItems, record.routineCheck, record.routineDesc, record.routineOther, record.activities, record.activitiesOther, record.mealPrep, record.mealPrepOther, record.dietQuality, record.dietQualityDesc, record.dietQualityOther, record.mealSpace, record.mealSpaceDesc, record.mealSpaceOther, record.mealWay, record.mealWayDesc, record.mealWayOther, record.mealCleanProcess, record.childCleanAfterMeal, record.toyClean, record.toyCleanOther, record.toyCleanDesc, record.envClean, record.envCleanOther, record.envCleanDesc, record.qualityDesc, record.qualityCheckResult, record.qualityCheckItems, record.qualityCheckReason, record.fourChildCheckResult, record.fourChildCheckItems, record.fourChildCheckReason, record.gameInteraction, record.gameInteractionDesc, record.positiveResponse, record.positiveResponseDesc, record.socialDevSupport, record.socialDevSupportDesc, record.otherInteractionObs, record.dailyHandover, record.parentCooperation, record.providerHealthSelf, record.visitorEval, record.visitorEvalReasons, record.visitorEvalOther, record.familyHealth, record.familyHealthReason, record.familyHealthDesc, record.familySupport, record.familySupportDesc, record.workImpactFamily, record.workImpactFamilyDesc, record.hasEmergencyDrill, record.emergencyDrill, record.emergencyDrillDesc, record.hasPendingFollowUp, record.pendingFollowUp, record.suggestedGuidance, record.safetyPropaganda, record.safetyPropagandaOther, record.generalPropaganda, record.generalPropagandaOther, record.providerAttitude, record.serviceNeeds, record.fieldGuidanceRecord, record.nextFollowUpFocus, record.isViolation, record.reviewResultDesc]);
 
   // Update time every second
   useEffect(() => {
@@ -125,7 +125,7 @@ export default function App() {
       "一、托育人員資料", "二、訪視資料", "三、托育狀況", "四、訪視類型", 
       "五、前次輔導追蹤", "六、本次訪視重點", "七、托育查核", "八、媒合需求", 
       "九、訪視狀況簡述", "十、收托幼兒狀況", "十一、托育環境", "十二、托育品質", 
-      "十三、互動與社會行為", "十四、保親關係", "十五、托育人員現況", 
+      "十三、托育人員與托兒間互動與社會行為", "十四、保親關係", "十五、托育人員現況", 
       "十六、緊急事件演練與抽問", "十七、待追蹤、改善事項", "十八、建議輔導事項", 
       "十九、托育安全宣導事項", "二十、宣導事項", "二十一、現場輔導紀錄", 
       "二十二、針對建議輔導後托育人員態度", "二十三、托育人員反映需求/建議", "二十四、下次輔導重點", 
@@ -366,7 +366,7 @@ export default function App() {
         isFilled = !!(record.routineCheck || record.qualityCheckResult || record.fourChildCheckResult || record.activities.length > 0 || record.mealPrep.length > 0 || record.dietQuality || record.mealSpace || record.mealWay || record.toyClean || record.envClean);
         hasIssues = record.routineCheck === '不符合' || record.dietQuality === '不符合' || record.mealSpace === '不符合' || record.mealWay === '不符合' || record.qualityCheckResult === '不符合' || record.fourChildCheckResult === '不符合';
         break;
-      case "十三、互動與社會行為":
+      case "十三、托育人員與托兒間互動與社會行為":
         isFilled = !!(record.gameInteraction || record.positiveResponse || record.socialDevSupport || record.otherInteractionObs);
         hasIssues = record.gameInteraction === '否' || record.positiveResponse === '否' || record.socialDevSupport === '否';
         break;
@@ -601,7 +601,7 @@ export default function App() {
                   "一、托育人員資料", "二、訪視資料", "三、托育狀況", "四、訪視類型", 
                   "五、前次輔導追蹤", "六、本次訪視重點", "七、托育查核", "八、媒合需求", 
                   "九、訪視狀況簡述", "十、收托幼兒狀況", "十一、托育環境", "十二、托育品質", 
-                  "十三、互動與社會行為", "十四、保親關係", "十五、托育人員現況", 
+                  "十三、托育人員與托兒間互動與社會行為", "十四、保親關係", "十五、托育人員現況", 
                   "十六、緊急事件演練與抽問", "十七、待追蹤、改善事項", "十八、建議輔導事項", 
                   "十九、托育安全宣導事項", "二十、宣導事項", "二十一、現場輔導紀錄", 
                   "二十二、針對建議輔導後托育人員態度", "二十三、托育人員反映需求/建議", "二十四、下次輔導重點", 
@@ -681,13 +681,21 @@ export default function App() {
             </FormSection>
 
             {/* 四、訪視類型 */}
-            <FormSection title="四、訪視類型" icon={<ShieldCheck className="w-5 h-5" />} borderColor="border-cyan-500" isOpen={openSections['type']} onToggle={() => toggleSection('type')} extraActions={<SectionActions sectionKeys={['serviceType', 'visitCategories', 'newChildName', 'reinforceReason', 'annualVisitCount', 'currentVisitCount', 'isJoint', 'jointProvider1Name', 'jointProvider1Children', 'jointProvider2Name', 'jointProvider2Children']} title="訪視類型" />}>
+            <FormSection title="四、訪視類型" icon={<ShieldCheck className="w-5 h-5" />} borderColor="border-cyan-500" isOpen={openSections['type']} onToggle={() => toggleSection('type')} extraActions={<SectionActions sectionKeys={['serviceType', 'visitCategories', 'newChildName', 'initialVisitCount', 'reinforceReason', 'annualVisitCount', 'currentVisitCount', 'visitCountDesc', 'isJoint', 'jointProvider1Name', 'jointProvider1Children', 'jointProvider2Name', 'jointProvider2Children']} title="訪視類型" />}>
               <div className="space-y-6">
                 <SelectField label="服務類型" options={['在宅', '到宅']} value={record.serviceType} onChange={(v) => updateField('serviceType', v)} />
                 <MultiSelectField label="訪視類別" options={['例行訪視', '新收托訪視', '初次訪視', '加強訪視', '實地審查']} values={record.visitCategories} onChange={(v) => updateField('visitCategories', v)} />
                 
                 {record.visitCategories.includes('新收托訪視') && (
                   <InputField label="新收托幼兒姓名" value={record.newChildName} onChange={(v) => updateField('newChildName', v)} />
+                )}
+                {record.visitCategories.includes('初次訪視') && (
+                  <InputField 
+                    label="第幾次初訪" 
+                    type="number"
+                    value={record.initialVisitCount} 
+                    onChange={(v) => updateField('initialVisitCount', v)} 
+                  />
                 )}
                 {record.visitCategories.includes('加強訪視') && (
                   <TextAreaField label="加強訪視原因" value={record.reinforceReason} onChange={(v) => updateField('reinforceReason', v)} placeholder="請寫明原因或幼兒姓名..." />
@@ -697,6 +705,7 @@ export default function App() {
                   <InputField label="年度應訪視次數" value={record.annualVisitCount} onChange={(v) => updateField('annualVisitCount', v)} type="number" />
                   <InputField label="本次訪視為今年第幾次" value={record.currentVisitCount} onChange={(v) => updateField('currentVisitCount', v)} type="number" />
                 </div>
+                <InputField label="說明" value={record.visitCountDesc} onChange={(v) => updateField('visitCountDesc', v)} placeholder="訪視次數說明..." />
 
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
                   <SelectField label="是否為聯合收托？" options={['是', '否']} value={record.isJoint} onChange={(v) => updateField('isJoint', v)} />
@@ -920,21 +929,21 @@ export default function App() {
             </FormSection>
 
             {/* 十三、十四、十五 */}
-            <FormSection title="十三、互動與社會行為" icon={<Users className="w-5 h-5" />} borderColor="border-pink-500" isOpen={openSections['interaction']} onToggle={() => toggleSection('interaction')} extraActions={<SectionActions sectionKeys={['gameInteraction', 'gameInteractionDesc', 'positiveResponse', 'positiveResponseDesc', 'socialDevSupport', 'socialDevSupportDesc', 'otherInteractionObs']} title="互動與社會行為" />}>
+            <FormSection title="十三、托育人員與托兒間互動與社會行為" icon={<Users className="w-5 h-5" />} borderColor="border-pink-500" isOpen={openSections['interaction']} onToggle={() => toggleSection('interaction')} extraActions={<SectionActions sectionKeys={['gameInteraction', 'gameInteractionDesc', 'positiveResponse', 'positiveResponseDesc', 'socialDevSupport', 'socialDevSupportDesc', 'otherInteractionObs']} title="托育人員與托兒間互動與社會行為" />}>
               <div className="space-y-6">
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="1. 經常進行遊戲互動" options={['是', '否']} value={record.gameInteraction} onChange={(v) => updateField('gameInteraction', v)} />
+                  <SelectField label="1. 托育人員能與幼兒經常進行遊戲互動" options={['是', '否']} value={record.gameInteraction} onChange={(v) => updateField('gameInteraction', v)} />
                   {record.gameInteraction === '否' && <TextAreaField label="說明" value={record.gameInteractionDesc} onChange={(v) => updateField('gameInteractionDesc', v)} />}
                 </div>
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="2. 敏銳、正向、溫暖回應" options={['是', '否']} value={record.positiveResponse} onChange={(v) => updateField('positiveResponse', v)} />
+                  <SelectField label="2. 托育人員能敏銳、正向、溫暖親切的回應幼兒" options={['是', '否']} value={record.positiveResponse} onChange={(v) => updateField('positiveResponse', v)} />
                   {record.positiveResponse === '否' && <TextAreaField label="說明" value={record.positiveResponseDesc} onChange={(v) => updateField('positiveResponseDesc', v)} />}
                 </div>
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="3. 協助促進社會發展" options={['是', '否']} value={record.socialDevSupport} onChange={(v) => updateField('socialDevSupport', v)} />
+                  <SelectField label="3. 托育人員能藉由對幼兒間互動和合作的協助來促進其社會發展" options={['是', '否']} value={record.socialDevSupport} onChange={(v) => updateField('socialDevSupport', v)} />
                   {record.socialDevSupport === '否' && <TextAreaField label="說明" value={record.socialDevSupportDesc} onChange={(v) => updateField('socialDevSupportDesc', v)} />}
                 </div>
-                <TextAreaField label="4. 其他互動觀察" value={record.otherInteractionObs} onChange={(v) => updateField('otherInteractionObs', v)} hint="擁抱、動作輕柔、疑似處罰工具..." />
+                <TextAreaField label="4. 其他互動觀察" value={record.otherInteractionObs} onChange={(v) => updateField('otherInteractionObs', v)} hint="托育人員與幼兒、幼兒與幼兒，托育嬰幼兒擁抱、移動時，動作輕柔、適時的護住頭頸，環境中是否有疑似處罰工具等" />
               </div>
             </FormSection>
 
