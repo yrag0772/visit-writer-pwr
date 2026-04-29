@@ -57,7 +57,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
           {s.attendanceStatus === '當天幼兒未送托' ? (
             <TextAreaField label="未送托原因說明" value={s.notPresentReason} onChange={(v) => updateStatus(index, 'notPresentReason', v)} placeholder="請輸入原因..." />
           ) : (
-            <div className="space-y-6">
+              <div className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <SelectField label="是否為新收托" options={['是', '否']} value={s.isNew} onChange={(v) => updateStatus(index, 'isNew', v)} />
                 <SelectField 
@@ -70,6 +70,15 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                   onOtherChange={(v) => updateStatus(index, 'careTypeOther', v)}
                 />
               </div>
+
+              {s.isNew === '是' && (
+                <div className="space-y-4 p-4 bg-pink-50/50 rounded-xl border border-pink-100">
+                  <h4 className="text-sm font-bold text-pink-800">新收托幼兒專區</h4>
+                  <TextAreaField label="新收托適應情況" value={s.adaptStatus} onChange={(v) => updateStatus(index, 'adaptStatus', v)} />
+                  <TextAreaField label="新收托保親溝通" value={s.parentComm} onChange={(v) => updateStatus(index, 'parentComm', v)} />
+                  <TextAreaField label="新托兒加入對其他幼兒影響" value={s.peerImpact} onChange={(v) => updateStatus(index, 'peerImpact', v)} />
+                </div>
+              )}
 
               <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-100">
                 <SelectField label="寶寶日誌" options={['有', '無']} value={s.hasLog} onChange={(v) => updateStatus(index, 'hasLog', v)} />
@@ -125,13 +134,13 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
               <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-100">
                 <SelectField label="身體外觀" options={['無明顯異常', '異常']} value={s.appearance} onChange={(v) => updateStatus(index, 'appearance', v)} />
                 {s.appearance === '異常' && (
-                  <MultiSelectField 
+                    <MultiSelectField 
                     label="異常狀況" 
                     options={[
                       '瘀青', '抓傷或擦傷', '頭眼腹外傷', 
                       '體重過輕或與身高不成比例，不符合兒童生長發展曲線',
                       '身體重要部位如：頭、腦、頸部、耳朵、軀幹，出現不尋常傷痕，或新舊傷夾雜',
-                      '兒童經常性或反覆受傷', '收傷應就醫而未就醫', '穿著不合身或不合時令',
+                      '兒童經常性或反覆受傷', '受傷應就醫而未就醫', '穿著不合身或不合時令',
                       '不願與他人互動、恐懼、退縮、焦慮', '精神恍惚、缺少微笑、沈默、沒有情緒表現',
                       '表情木然或不悅、自傷行為、搖晃身體'
                     ]} 
@@ -152,7 +161,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                 </h4>
                 <MultiSelectField 
                   label="睡眠情形" 
-                  options={['安穩', '易醒', '睡眠時間短', '淺眠', '趴睡（已提醒1歲以下幼兒趴睡有風險，並提醒五招安心睡）']} 
+                  options={['安穩', '易醒', '睡眠時間短', '淺眠', '趴睡（應宣導趴睡風險及五招安心睡）']} 
                   values={s.sleepStatus} 
                   onChange={(v) => updateStatus(index, 'sleepStatus', v)}
                   allowOther
@@ -163,14 +172,14 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                   <div className="space-y-4">
                     <SelectField 
                       label="睡姿" 
-                      options={['仰睡', '自由睡姿', '一歲以下幼兒非仰睡']} 
+                      options={['仰睡', '自由睡姿', '一歲以下幼兒非仰睡（應輔導）']} 
                       value={s.sleepPosture} 
                       onChange={(v) => updateStatus(index, 'sleepPosture', v)} 
                       allowOther
                       otherValue={s.sleepPostureOther}
                       onOtherChange={(v) => updateStatus(index, 'sleepPostureOther', v)}
                     />
-                    {s.sleepPosture === '一歲以下幼兒非仰睡' && (
+                    {s.sleepPosture === '一歲以下幼兒非仰睡（應輔導）' && (
                       <TextAreaField 
                         label="輔導說明 (一歲以下應仰睡)" 
                         value={s.sleepNonBackGuidance} 
@@ -189,7 +198,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                 <h4 className="text-sm font-bold text-green-800">清潔盥洗</h4>
                 <div className="grid grid-cols-3 gap-4">
                   <InputField label="換尿布頻率" value={s.diaperFreq} onChange={(v) => updateStatus(index, 'diaperFreq', v)} />
-                  <InputField label="洗澡、清洗屁屁" value={s.bathCleaning} onChange={(v) => updateStatus(index, 'bathCleaning', v)} hint="多位托兒時如何安排" />
+                  <InputField label="洗澡、清洗屁屁（多位托兒如何安排）" value={s.bathCleaning} onChange={(v) => updateStatus(index, 'bathCleaning', v)} />
                   <InputField label="是否如廁練習" value={s.toiletTraining} onChange={(v) => updateStatus(index, 'toiletTraining', v)} hint="托兒已能如廁前表達" />
                 </div>
                 <InputField label="清潔盥洗其他說明" value={s.cleaningOther} onChange={(v) => updateStatus(index, 'cleaningOther', v)} />
@@ -198,7 +207,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
               <div className="space-y-4 p-4 bg-purple-50/50 rounded-xl border border-purple-100">
                 <SelectField 
                   label="督導托育人員施作發展檢核" 
-                  options={['正常', '異常', '未滿3個月14天，無法施作', '本階段已施作']} 
+                  options={['正常', '異常', '未滿3個月14天，無法施作', '本階段已施作（應確認先前施作時間）']} 
                   value={s.devCheck} 
                   onChange={(v) => updateStatus(index, 'devCheck', v)}
                   allowOther
@@ -209,14 +218,14 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                 <div className="space-y-4">
                   <TextAreaField label="發展狀況描述" value={s.devDesc} onChange={(v) => updateStatus(index, 'devDesc', v)} />
                   
-                  {['正常', '異常', '本階段已施作', '其他'].includes(s.devCheck === '其他' ? '其他' : s.devCheck) && (
+                  {['正常', '異常', '本階段已施作（應確認先前施作時間）', '其他'].includes(s.devCheck === '其他' ? '其他' : s.devCheck) && (
                     <InputField label="目前為發展階段第幾階" value={s.devStage} onChange={(v) => updateStatus(index, 'devStage', v)} />
                   )}
 
                   {s.devCheck === '異常' && (
                     <div className="space-y-4 pt-2 border-t border-purple-200">
                       <div className="grid grid-cols-2 gap-4">
-                        <SelectField label="異常通報" options={['已通報', '未通報']} value={s.devReport} onChange={(v) => updateStatus(index, 'devReport', v)} />
+                        <SelectField label="發展異常通報" options={['已通報', '未通報']} value={s.devReport} onChange={(v) => updateStatus(index, 'devReport', v)} />
                         {s.devReport === '已通報' && (
                           <InputField label="通報時間" value={s.devReportTime} onChange={(v) => updateStatus(index, 'devReportTime', v)} />
                         )}
@@ -227,7 +236,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                     </div>
                   )}
 
-                  {s.devCheck === '本階段已施作' && (
+                  {s.devCheck === '本階段已施作（應確認先前施作時間）' && (
                     <InputField label="先前施作日期" value={s.devPrevDate} onChange={(v) => updateStatus(index, 'devPrevDate', v)} type="date" />
                   )}
                 </div>
@@ -272,15 +281,6 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                 </div>
                 <TextAreaField label="其他描述" value={s.otherDesc} onChange={(v) => updateStatus(index, 'otherDesc', v)} />
               </div>
-
-              {s.isNew === '是' && (
-                <div className="space-y-4 p-4 bg-pink-50/50 rounded-xl border border-pink-100">
-                  <h4 className="text-sm font-bold text-pink-800">新收托幼兒專區</h4>
-                  <TextAreaField label="適應狀況" value={s.adaptStatus} onChange={(v) => updateStatus(index, 'adaptStatus', v)} />
-                  <TextAreaField label="保親溝通狀況" value={s.parentComm} onChange={(v) => updateStatus(index, 'parentComm', v)} />
-                  <TextAreaField label="加入對其他幼兒的影響" value={s.peerImpact} onChange={(v) => updateStatus(index, 'peerImpact', v)} />
-                </div>
-              )}
             </div>
           )}
         </div>

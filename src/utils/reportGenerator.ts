@@ -80,14 +80,14 @@ export const generateVisitReport = (record: VisitRecord): string => {
         
         const cleaningInfo = [
           c.diaperFreq ? `換尿布頻率: ${c.diaperFreq}` : '',
-          c.bathCleaning ? `洗澡、清洗屁屁: ${c.bathCleaning}` : '',
+          c.bathCleaning ? `洗澡、清洗屁屁（多位托兒如何安排）: ${c.bathCleaning}` : '',
           c.toiletTraining ? `如廁練習: ${c.toiletTraining}` : '',
           c.cleaningOther ? `${c.cleaningOther}` : ''
         ].filter(Boolean).join(' / ');
 
         const sleepInfoParts = [
           c.sleepStatus.length > 0 ? `${c.sleepStatus.map(v => v === '其他' ? c.sleepStatusOther : v).join('、')}` : '',
-          c.sleepPosture ? `睡姿: ${otherS(c.sleepPosture, c.sleepPostureOther)}${c.sleepPosture === '一歲以下幼兒非仰睡' ? ` (輔導：${s(c.sleepNonBackGuidance)})` : ''}` : '',
+          c.sleepPosture ? `睡姿: ${otherS(c.sleepPosture, c.sleepPostureOther)}${c.sleepPosture === '一歲以下幼兒非仰睡（應輔導）' ? ` (輔導：${s(c.sleepNonBackGuidance)})` : ''}` : '',
           c.sleepTime ? `時間: ${c.sleepTime}` : '',
           c.sleepArea ? `區域: ${c.sleepArea}` : '',
           c.sleepSoothing ? `睡眠與情緒安撫: ${c.sleepSoothing}` : ''
@@ -103,7 +103,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
         const devCheckParts = [
           c.devCheck ? `${otherS(c.devCheck, c.devCheckOther)}` : '',
           c.devStage ? `階段: ${c.devStage}` : '',
-          c.devReport ? `通報: ${s(c.devReport)}${c.devReport === '已通報' ? ` (${c.devReportTime})` : ` (${c.devReportReason})`}` : '',
+          c.devReport ? `發展異常通報: ${s(c.devReport)}${c.devReport === '已通報' ? ` (${c.devReportTime})` : ` (${c.devReportReason})`}` : '',
           c.devPrevDate ? `先前日期: ${c.devPrevDate}` : ''
         ].filter(Boolean);
 
@@ -118,12 +118,12 @@ export const generateVisitReport = (record: VisitRecord): string => {
           devCheckParts.length > 0 ? `<p><strong>發展檢核：</strong> ${devCheckParts.join(' / ')}</p>` : '',
           c.devDesc ? `<p><strong>發展描述：</strong> ${nl2br(c.devDesc)}</p>` : '',
           dietInfoParts.length > 0 ? `<p><strong>飲食：</strong> ${dietInfoParts.join(' / ')}</p>` : '',
-          c.interaction ? `<p><strong>互動：</strong> ${otherS(c.interaction, c.interactionOther)} ${c.interactionDesc ? `/ 說明: ${s(c.interactionDesc)}` : ''}</p>` : '',
+          c.interaction ? `<p><strong>幼兒與托育人員互動情形：</strong> ${otherS(c.interaction, c.interactionOther)} ${c.interactionDesc ? `/ 說明: ${s(c.interactionDesc)}` : ''}</p>` : '',
           c.otherDesc ? `<p><strong>其他描述：</strong> ${nl2br(c.otherDesc)}</p>` : '',
           c.isNew === '是' ? `
-            ${c.adaptStatus ? `<p><strong>新收托適應：</strong> ${s(c.adaptStatus)}</p>` : ''}
-            ${c.parentComm ? `<p><strong>保親溝通：</strong> ${s(c.parentComm)}</p>` : ''}
-            ${c.peerImpact ? `<p><strong>同儕影響：</strong> ${s(c.peerImpact)}</p>` : ''}
+            ${c.adaptStatus ? `<p><strong>新收托適應情況：</strong> ${s(c.adaptStatus)}</p>` : ''}
+            ${c.parentComm ? `<p><strong>新收托保親溝通：</strong> ${s(c.parentComm)}</p>` : ''}
+            ${c.peerImpact ? `<p><strong>新托兒加入對其他幼兒影響：</strong> ${s(c.peerImpact)}</p>` : ''}
           ` : ''
         ].filter(Boolean).join('');
 
@@ -179,8 +179,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
     record.envCheckItems && record.envCheckItems.length > 0 ? `不符合指標：<br/>${record.envCheckItems.join('<br/>')}` : '',
     record.envFacilities.length > 0 ? `設施設備：${multiOtherS(record.envFacilities, record.envFacilitiesOther)}` : '',
     record.envComfort.length > 0 ? `舒適度：${multiOtherS(record.envComfort, record.envComfortOther)}` : '',
-    record.noSmokingResult ? `禁菸標誌：${record.noSmokingResult}${record.noSmokingResult === '不符合' ? ` (說明：${record.noSmokingDesc})` : ''}` : '',
-    record.envDesc ? `托育環境說明：<br/>${nl2br(record.envDesc)}` : ''
+    record.noSmokingResult ? `禁菸標誌：${record.noSmokingResult}${record.noSmokingResult === '不符合' ? ` (說明：${record.noSmokingDesc})` : ''}` : ''
   ].filter(Boolean).join('<br/>');
 
   const qualityInfo = [
@@ -191,8 +190,8 @@ export const generateVisitReport = (record: VisitRecord): string => {
     (record.dietQuality || record.dietQualityOther) ? `依兒童年齡提供多樣化飲食：${record.dietQuality}${record.dietQuality && record.dietQualityOther ? '／' : ''}${record.dietQualityOther}` : '',
     (record.mealSpace || record.mealSpaceOther) ? `用餐空間、用品合宜且足夠：${record.mealSpace}${record.mealSpace && record.mealSpaceOther ? '／' : ''}${record.mealSpaceOther}` : '',
     (record.mealWay || record.mealWayOther) ? `適齡的餵食或用餐方式：${record.mealWay}${record.mealWay && record.mealWayOther ? '／' : ''}${record.mealWayOther}` : '',
-    record.mealCleanProcess ? `用餐環境清潔：${record.mealCleanProcess}` : '',
-    record.childCleanAfterMeal ? `幼兒餐後清潔：${record.childCleanAfterMeal}` : '',
+    record.mealCleanProcess ? `用餐後環境清潔流程：${record.mealCleanProcess}` : '',
+    record.childCleanAfterMeal ? `用餐完幼兒清潔（擦臉、刷牙）：${record.childCleanAfterMeal}` : '',
     record.toyClean ? `教玩具清潔：${otherS(record.toyClean, record.toyCleanOther)}${record.toyClean === '不符合' ? ` (說明：${record.toyCleanDesc})` : ''}` : '',
     record.envClean ? `環境衛生：${otherS(record.envClean, record.envCleanOther)}${record.envClean === '不符合' ? ` (說明：${record.envCleanDesc})` : ''}` : '',
     record.qualityCheckResult ? `照顧品質評估指標檢核：${record.qualityCheckResult}` : '',

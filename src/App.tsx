@@ -32,6 +32,7 @@ import { FormSection, InputField, SelectField, MultiSelectField, TextAreaField }
 import { ChildInfoForm } from './components/ChildInfoForm';
 import { ChildStatusForm } from './components/ChildStatusForm';
 import { generateVisitReport } from './utils/reportGenerator';
+import { PrepData, defaultPrepData, generatePrepReport, prepSectionsList } from './utils/prepReportGenerator';
 
 export default function App() {
   const [records, setRecords] = useState<VisitRecord[]>([{ ...initialRecord }]);
@@ -39,6 +40,9 @@ export default function App() {
   const [isOutlineOpen, setIsOutlineOpen] = useState(true);
   const [activeSection, setActiveSection] = useState<string>('');
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [viewMode, setViewMode] = useState<'record' | 'prep'>('record');
+  const [prepData, setPrepData] = useState<PrepData>(defaultPrepData);
+  const [prepContent, setPrepContent] = useState<string>('');
   const record = records[activeTabIndex] || initialRecord;
 
   // Load from localStorage on mount
@@ -119,9 +123,31 @@ export default function App() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    if (viewMode === 'prep') {
+      setPrepContent(generatePrepReport(prepData));
+    }
+  }, [viewMode, prepData]);
+
+  const updatePrepData = (section: string, field: 'enabled' | 'notes', value: any) => {
+    setPrepData(prev => {
+      const sectionData = prev.sections[section] || { enabled: true, notes: '' };
+      return {
+        ...prev,
+        sections: {
+          ...prev.sections,
+          [section]: {
+            ...sectionData,
+            [field]: value
+          }
+        }
+      };
+    });
+  };
+
   // Track active section on scroll
   useEffect(() => {
-    const sections = [
+    const sections = viewMode === 'record' ? [
       "一、托育人員資料", "二、訪視資料", "三、托育狀況", "四、訪視類型", 
       "五、前次輔導追蹤", "六、本次訪視重點", "七、托育查核", "八、媒合需求", 
       "九、訪視狀況簡述", "十、收托幼兒狀況", "十一、托育環境", "十二、托育品質", 
@@ -129,8 +155,15 @@ export default function App() {
       "十六、緊急事件演練與抽問", "十七、待追蹤、改善事項", "十八、建議輔導事項", 
       "十九、托育安全宣導事項", "二十、宣導事項", "二十一、現場輔導紀錄", 
       "二十二、針對建議輔導後托育人員態度", "二十三、托育人員反映需求/建議", "二十四、下次輔導重點", 
-      "二十五、是否違反考核項目"
+      "二十5、是否違反考核項目" // Typo in original code maybe? Wait, let's just make it match the other array
+    ] : [
+      "一、基本資料", "二、收托兒童基本資料", "四、訪視類型", "五、訪視重點", 
+      "六、單位訪查紀錄", "七、訪視查核及評估", "八、托育品質與互動狀況", "九、托育人員現況", "十、宣導事項及建議"
     ];
+
+    // Correcting typo just in case
+    sections[sections.indexOf("二十5、是否違反考核項目")] = "二十五、是否違反考核項目"; // Though indexOf returns -1 if not found which we must protect against
+    const targetSections = sections.map(s => s === "二十5、是否違反考核項目" ? "二十五、是否違反考核項目" : s);
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -143,20 +176,23 @@ export default function App() {
       { threshold: 0.1, rootMargin: '-10% 0px -70% 0px' }
     );
 
-    sections.forEach((id) => {
+    targetSections.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
 
     return () => observer.disconnect();
-  }, [activeTabIndex]);
+  }, [activeTabIndex, viewMode]);
 
   // Use a separate effect to update the editor DOM when fullContent changes
   useEffect(() => {
-    if (editorRef.current && editorRef.current.innerHTML !== record.fullContent) {
-      editorRef.current.innerHTML = record.fullContent;
+    if (editorRef.current) {
+      const targetContent = viewMode === 'prep' ? prepContent : record.fullContent;
+      if (editorRef.current.innerHTML !== targetContent) {
+        editorRef.current.innerHTML = targetContent;
+      }
     }
-  }, [record.fullContent]);
+  }, [record.fullContent, prepContent, viewMode]);
 
   const updateField = (field: keyof VisitRecord, value: any) => {
     setRecords(prev => {
@@ -466,7 +502,7 @@ export default function App() {
   };
 
   const exportToWord = () => {
-    const content = record.fullContent;
+    const content = viewMode === 'prep' ? prepContent : record.fullContent;
     const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
             "xmlns:w='urn:schemas-microsoft-com:office:word' "+
             "xmlns='http://www.w3.org/TR/REC-html40'>"+
@@ -487,7 +523,7 @@ export default function App() {
     fileLink.href = source;
     
     // Optimized filename: Category_ProviderName_Timestamp.doc
-    const category = record.visitCategories.length > 0 ? record.visitCategories[0] : '訪視紀錄';
+    const category = viewMode === 'prep' ? '訪視準備' : (record.visitCategories.length > 0 ? record.visitCategories[0] : '訪視紀錄');
     const fileName = `${category}_${record.providerName || '未命名'}_${timestamp}.doc`;
     
     fileLink.download = fileName;
@@ -546,22 +582,44 @@ export default function App() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {/* Individual Record Group */}
           <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
-            <button 
-              onClick={exportIndividualRecord}
-              className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-brand hover:bg-white rounded-lg transition-all"
-              title="儲存目前這份紀錄 (JSON)"
+            <button
+              onClick={() => setViewMode('record')}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold transition-all rounded-lg ${viewMode === 'record' ? 'bg-white text-brand shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
             >
-              <Save className="w-3.5 h-3.5" />
-              儲存個別紀錄
+              <FileText className="w-4 h-4" />
+              紀錄撰寫
             </button>
-            <label className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-brand hover:bg-white rounded-lg transition-all cursor-pointer" title="匯入單份紀錄檔案">
-              <Upload className="w-3.5 h-3.5" />
-              匯入個別紀錄
-              <input type="file" accept=".json" onChange={importIndividualRecord} className="hidden" />
-            </label>
+            <button
+              onClick={() => setViewMode('prep')}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold transition-all rounded-lg ${viewMode === 'prep' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              <ClipboardCheck className="w-4 h-4" />
+              訪視準備
+            </button>
           </div>
+          
+          {viewMode === 'record' && (
+            <>
+              <div className="w-px h-6 bg-slate-200 mx-1" />
+              {/* Individual Record Group */}
+              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+                <button 
+                  onClick={exportIndividualRecord}
+                  className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-brand hover:bg-white rounded-lg transition-all"
+                  title="儲存目前這份紀錄 (JSON)"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  儲存個別紀錄
+                </button>
+                <label className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-brand hover:bg-white rounded-lg transition-all cursor-pointer" title="匯入單份紀錄檔案">
+                  <Upload className="w-3.5 h-3.5" />
+                  匯入個別紀錄
+                  <input type="file" accept=".json" onChange={importIndividualRecord} className="hidden" />
+                </label>
+              </div>
+            </>
+          )}
 
           <div className="w-px h-6 bg-slate-200 mx-1" />
           <button 
@@ -597,7 +655,7 @@ export default function App() {
               </div>
               
               <nav className="flex-1 overflow-y-auto p-2 space-y-1">
-                {[
+                {(viewMode === 'record' ? [
                   "一、托育人員資料", "二、訪視資料", "三、托育狀況", "四、訪視類型", 
                   "五、前次輔導追蹤", "六、本次訪視重點", "七、托育查核", "八、媒合需求", 
                   "九、訪視狀況簡述", "十、收托幼兒狀況", "十一、托育環境", "十二、托育品質", 
@@ -606,8 +664,8 @@ export default function App() {
                   "十九、托育安全宣導事項", "二十、宣導事項", "二十一、現場輔導紀錄", 
                   "二十二、針對建議輔導後托育人員態度", "二十三、托育人員反映需求/建議", "二十四、下次輔導重點", 
                   "二十五、是否違反考核項目"
-                ].map((title) => {
-                  const { isFilled, hasIssues } = getSectionStatus(title);
+                ] : prepSectionsList).map((title) => {
+                  const { isFilled, hasIssues } = viewMode === 'record' ? getSectionStatus(title) : { isFilled: true, hasIssues: false };
                   return (
                     <button
                       key={title}
@@ -642,11 +700,123 @@ export default function App() {
             </aside>
 
         {/* Left Side: Input Form */}
-        <section className="flex-1 border-r border-slate-200 bg-slate-50/50 overflow-y-auto p-6 shadow-inner">
+        <section className="flex-1 border-r border-slate-200 bg-slate-50/50 overflow-y-auto p-6 shadow-inner" id="scroll-container">
           <div className="max-w-2xl mx-auto space-y-6 pb-24">
             
-            {/* 一、托育人員資料 */}
-            <FormSection title="一、托育人員資料" icon={<User className="w-5 h-5" />} isOpen={openSections['provider']} onToggle={() => toggleSection('provider')} extraActions={<SectionActions sectionKeys={['providerName', 'providerNo', 'providerId']} title="托育人員資料" />}>
+            {viewMode === 'prep' ? (
+              <>
+                {prepSectionsList.map((title) => (
+                  <FormSection key={title} title={title} isOpen={true} onToggle={() => {}} id={title}>
+                    <div className="space-y-4 pt-2">
+                      <label className="flex items-center gap-2 cursor-pointer bg-indigo-50 p-3 rounded-lg hover:bg-indigo-100 transition-colors">
+                        <input 
+                          type="checkbox" 
+                          checked={prepData.sections[title]?.enabled ?? true} 
+                          onChange={(e) => updatePrepData(title, 'enabled', e.target.checked)} 
+                          className="w-5 h-5 rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500" 
+                        />
+                        <span className="font-bold text-indigo-900">在報表中顯示此區塊</span>
+                      </label>
+                      
+                      {title === '一、托育人員資料' && (
+                        <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                          <InputField label="姓名" value={prepData.providerName || ''} onChange={(v) => setPrepData(prev => ({ ...prev, providerName: v }))} />
+                        </div>
+                      )}
+
+                      {title === '三、托育狀況' && (
+                        <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
+                          <SelectField 
+                            label="收托人數" 
+                            options={['1', '2', '3', '4']} 
+                            value={String(prepData.childCount)} 
+                            onChange={(v) => setPrepData(prev => ({ ...prev, childCount: parseInt(v) }))} 
+                          />
+                          {Array.from({ length: prepData.childCount }).map((_, i) => (
+                            <div key={i} className="space-y-4 border-t border-slate-200 pt-4 mt-4">
+                              <h4 className="font-bold text-sm text-slate-700">幼兒 {i + 1}</h4>
+                              <InputField label="幼兒姓名" value={prepData.children[i]?.name || ''} onChange={(v) => {
+                                const newChildren = [...prepData.children];
+                                newChildren[i] = { ...newChildren[i], name: v };
+                                setPrepData(prev => ({ ...prev, children: newChildren }));
+                              }} />
+                              <InputField label="出生年月日" value={prepData.children[i]?.birthday || ''} onChange={(v) => {
+                                const newChildren = [...prepData.children];
+                                newChildren[i] = { ...newChildren[i], birthday: v };
+                                setPrepData(prev => ({ ...prev, children: newChildren }));
+                              }} />
+                              <InputField label="托育起日" value={prepData.children[i]?.startDate || ''} onChange={(v) => {
+                                const newChildren = [...prepData.children];
+                                newChildren[i] = { ...newChildren[i], startDate: v };
+                                setPrepData(prev => ({ ...prev, children: newChildren }));
+                              }} />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {title === '四、訪視類型' && (
+                        <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-6">
+                          <SelectField label="服務類型" options={['在宅', '到宅']} value={prepData.serviceType} onChange={(v) => setPrepData(prev => ({ ...prev, serviceType: v }))} />
+                          <MultiSelectField label="訪視類別" options={['例行訪視', '新收托訪視', '初次訪視', '加強訪視', '實地審查']} values={prepData.visitCategories} onChange={(v) => setPrepData(prev => ({ ...prev, visitCategories: v }))} />
+                          
+                          {prepData.visitCategories.includes('新收托訪視') && (
+                            <InputField label="新收托幼兒姓名" value={prepData.newChildName} onChange={(v) => setPrepData(prev => ({ ...prev, newChildName: v }))} />
+                          )}
+                          {prepData.visitCategories.includes('初次訪視') && (
+                            <InputField label="第幾次初訪" value={prepData.initialVisitCount} onChange={(v) => setPrepData(prev => ({ ...prev, initialVisitCount: v }))} />
+                          )}
+                          {prepData.visitCategories.includes('加強訪視') && (
+                            <InputField label="加強訪視原因" value={prepData.reinforceReason} onChange={(v) => setPrepData(prev => ({ ...prev, reinforceReason: v }))} />
+                          )}
+                          
+                          <div className="grid grid-cols-2 gap-4">
+                            <InputField label="年度應訪視次數" value={prepData.annualVisitCount} onChange={(v) => setPrepData(prev => ({ ...prev, annualVisitCount: v }))} />
+                            <InputField label="本次為今年次第幾次" value={prepData.currentVisitCount} onChange={(v) => setPrepData(prev => ({ ...prev, currentVisitCount: v }))} />
+                          </div>
+                          
+                          <InputField label="說明" value={prepData.visitCountDesc} onChange={(v) => setPrepData(prev => ({ ...prev, visitCountDesc: v }))} />
+                          
+                          <SelectField label="是否為聯合收托" options={['是', '否']} value={prepData.isJoint} onChange={(v) => setPrepData(prev => ({ ...prev, isJoint: v }))} />
+                          
+                          {prepData.isJoint === '是' && (
+                            <div className="space-y-4 pt-4 border-t border-slate-200">
+                              <div className="grid grid-cols-2 gap-4">
+                                <InputField label="聯合收托人1姓名" value={prepData.jointProvider1Name} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider1Name: v }))} />
+                                <InputField label="收托幼兒" value={prepData.jointProvider1Children} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider1Children: v }))} />
+                              </div>
+                              <div className="grid grid-cols-2 gap-4">
+                                <InputField label="聯合收托人2姓名" value={prepData.jointProvider2Name} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider2Name: v }))} />
+                                <InputField label="收托幼兒" value={prepData.jointProvider2Children} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider2Children: v }))} />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {title === '七、托育查核' && (
+                        <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
+                          <TextAreaField label="申請補助之幼兒人數及姓名、是否有未申請補助者：" value={prepData.subsidyStatus || ''} onChange={(v) => setPrepData(prev => ({ ...prev, subsidyStatus: v }))} />
+                          <InputField label="現場親見收托兒童數：" value={prepData.actualChildCountCheck || ''} onChange={(v) => setPrepData(prev => ({ ...prev, actualChildCountCheck: v }))} />
+                          <SelectField label="收托數是否符合收托資料：" options={['是', '否']} value={prepData.childCountMatch || '是'} onChange={(v) => setPrepData(prev => ({ ...prev, childCountMatch: v as '是' | '否' }))} />
+                          <SelectField label="收費是否與托育契約書一致：" options={['是', '否']} value={prepData.feeMatch || '是'} onChange={(v) => setPrepData(prev => ({ ...prev, feeMatch: v as '是' | '否' }))} />
+                          <TextAreaField label="幼兒托育時間及費用" value={prepData.feeDetails || ''} onChange={(v) => setPrepData(prev => ({ ...prev, feeDetails: v }))} />
+                        </div>
+                      )}
+
+                      <TextAreaField 
+                        label="區塊筆記 (在此輸入提醒自己要注意的事項)" 
+                        value={prepData.sections[title]?.notes ?? ''} 
+                        onChange={(v) => updatePrepData(title, 'notes', v)} 
+                      />
+                    </div>
+                  </FormSection>
+                ))}
+              </>
+            ) : (
+              <>
+                {/* 一、托育人員資料 */}
+                <FormSection title="一、托育人員資料" icon={<User className="w-5 h-5" />} isOpen={openSections['provider']} onToggle={() => toggleSection('provider')} extraActions={<SectionActions sectionKeys={['providerName', 'providerNo', 'providerId']} title="托育人員資料" />}>
               <div className="grid grid-cols-3 gap-4">
                 <InputField label="姓名" value={record.providerName} onChange={(v) => updateField('providerName', v)} placeholder="請輸入姓名" />
                 <InputField label="編號" value={record.providerNo} onChange={(v) => updateField('providerNo', v)} placeholder="請輸入編號" />
@@ -819,7 +989,6 @@ export default function App() {
                   <SelectField label="4. 確認托育地確實為全面禁菸場所" options={['符合', '不符合']} value={record.noSmokingResult} onChange={(v) => updateField('noSmokingResult', v)} />
                   {record.noSmokingResult === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.noSmokingDesc} onChange={(v) => updateField('noSmokingDesc', v)} />}
                 </div>
-                <TextAreaField label="托育環境說明" value={record.envDesc} onChange={(v) => updateField('envDesc', v)} placeholder="請輸入額外說明..." />
               </div>
             </FormSection>
 
@@ -845,8 +1014,8 @@ export default function App() {
                   <SelectField label="5.2 適齡的餵食或用餐方式" options={['符合', '不符合']} value={record.mealWay} onChange={(v) => updateField('mealWay', v)} />
                   <TextAreaField label="現況及說明" value={record.mealWayOther} onChange={(v) => updateField('mealWayOther', v)} placeholder="請輸入說明..." />
                 </div>
-                <InputField label="5.3 用餐完環境清潔方式、流程" value={record.mealCleanProcess} onChange={(v) => updateField('mealCleanProcess', v)} />
-                <InputField label="5.4 用餐完幼兒清潔" value={record.childCleanAfterMeal} onChange={(v) => updateField('childCleanAfterMeal', v)} hint="擦臉、刷牙等" />
+                <InputField label="5.3 用餐後環境清潔流程：" value={record.mealCleanProcess} onChange={(v) => updateField('mealCleanProcess', v)} />
+                <InputField label="5.4 用餐完幼兒清潔（擦臉、刷牙）：" value={record.childCleanAfterMeal} onChange={(v) => updateField('childCleanAfterMeal', v)} />
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
@@ -1063,6 +1232,8 @@ export default function App() {
                 )}
               </div>
             </FormSection>
+            </>
+            )}
 
           </div>
         </section>
@@ -1070,16 +1241,16 @@ export default function App() {
         {/* Right Side: Word-like Editor */}
         <section className="flex-1 bg-slate-200 overflow-y-auto p-10 relative flex flex-col items-center">
           {/* Paper Container */}
-          <div className={`w-full max-w-[210mm] bg-white shadow-2xl min-h-fit p-[20mm] transition-all duration-500 relative mb-20 ${!autoSync ? 'ring-4 ring-amber-400 ring-inset' : ''}`}>
+          <div className={`w-full max-w-[210mm] bg-white shadow-2xl min-h-fit p-[20mm] transition-all duration-500 relative mb-20 ${!autoSync && viewMode === 'record' ? 'ring-4 ring-amber-400 ring-inset' : ''}`}>
             <div className="h-full bg-white">
               <div className="absolute top-4 right-4 flex flex-col items-end gap-2 pointer-events-none">
-                {!autoSync && (
+                {!autoSync && viewMode === 'record' && (
                   <div className="flex items-center gap-1 px-2 py-1 bg-amber-100 text-amber-600 rounded text-[10px] font-bold border border-amber-200 animate-pulse">
                     <RefreshCw className="w-3 h-3" />
                     非同步模式
                   </div>
                 )}
-                {autoSync && (
+                {autoSync && viewMode === 'record' && (
                   <div className="flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 rounded text-[10px] font-bold border border-blue-100">
                     <RefreshCw className="w-3 h-3" />
                     自動同步啟用中
@@ -1090,7 +1261,7 @@ export default function App() {
                 </div>
               </div>
               
-              {autoSync && (
+              {autoSync && viewMode === 'record' && (
                 <div className="absolute top-4 left-0 right-0 flex justify-center pointer-events-none z-10">
                   <div className="bg-amber-50/90 backdrop-blur text-amber-700 text-[11px] font-bold px-4 py-2 rounded-full border border-amber-200 shadow-sm flex items-center gap-2 animate-bounce">
                     <AlertCircle className="w-3.5 h-3.5" />
@@ -1101,8 +1272,8 @@ export default function App() {
 
               <div
                 ref={editorRef}
-                contentEditable
-                onInput={handleEditorChange}
+                contentEditable={viewMode === 'record'}
+                onInput={viewMode === 'record' ? handleEditorChange : undefined}
                 className="outline-none prose prose-slate max-w-none min-h-[297mm] font-serif text-[#333] leading-relaxed bg-white"
                 style={{ fontFamily: "'Microsoft JhengHei', sans-serif" }}
               />
@@ -1110,21 +1281,30 @@ export default function App() {
           </div>
           
           <div className="fixed bottom-6 right-10 flex flex-col items-end gap-3 z-50">
-            <div className="flex items-center gap-3 bg-white/90 backdrop-blur p-3 rounded-2xl shadow-xl border border-slate-200">
-              <label className="flex items-center gap-2 text-xs font-bold text-slate-600 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={autoSync} 
-                  onChange={(e) => setAutoSync(e.target.checked)}
-                  className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                />
-                自動同步表單內容
-              </label>
-            </div>
-            <div className="text-slate-400 text-[10px] font-medium flex items-center gap-2 bg-white/80 backdrop-blur px-3 py-1 rounded-full shadow-sm">
-              <Settings className="w-3 h-3" />
-              右側內容可直接點擊編輯，編輯後將同步至匯出檔案
-            </div>
+            {viewMode === 'record' && (
+              <div className="flex items-center gap-3 bg-white/90 backdrop-blur p-3 rounded-2xl shadow-xl border border-slate-200">
+                <label className="flex items-center gap-2 text-xs font-bold text-slate-600 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={autoSync} 
+                    onChange={(e) => setAutoSync(e.target.checked)}
+                    className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  自動同步表單內容
+                </label>
+              </div>
+            )}
+            {viewMode === 'record' ? (
+              <div className="text-slate-400 text-[10px] font-medium flex items-center gap-2 bg-white/80 backdrop-blur px-3 py-1 rounded-full shadow-sm">
+                <Settings className="w-3 h-3" />
+                右側內容可直接點擊編輯，編輯後將同步至匯出檔案
+              </div>
+            ) : (
+              <div className="text-slate-400 text-[10px] font-medium flex items-center gap-2 bg-white/80 backdrop-blur px-3 py-1 rounded-full shadow-sm">
+                <Settings className="w-3 h-3" />
+                訪視準備清單為系統自動生成，不可手動編輯
+              </div>
+            )}
           </div>
         </section>
       </main>
