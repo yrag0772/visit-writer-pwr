@@ -41,7 +41,20 @@ export default function App() {
   const [activeSection, setActiveSection] = useState<string>('');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [viewMode, setViewMode] = useState<'record' | 'prep'>('record');
-  const [prepData, setPrepData] = useState<PrepData>(defaultPrepData);
+  const [prepRecords, setPrepRecords] = useState<PrepData[]>([{ ...defaultPrepData }]);
+  const [activePrepTabIndex, setActivePrepTabIndex] = useState(0);
+  const prepData = prepRecords[activePrepTabIndex] || defaultPrepData;
+
+  const setPrepData = (updater: React.SetStateAction<PrepData>) => {
+    setPrepRecords(prevRecords => {
+      const newRecords = [...prevRecords];
+      const current = newRecords[activePrepTabIndex] || defaultPrepData;
+      const next = typeof updater === 'function' ? (updater as (prev: PrepData) => PrepData)(current) : updater;
+      newRecords[activePrepTabIndex] = next;
+      return newRecords;
+    });
+  };
+
   const [prepContent, setPrepContent] = useState<string>('');
   const record = records[activeTabIndex] || initialRecord;
 
@@ -63,12 +76,32 @@ export default function App() {
         console.error('Failed to load records from localStorage', e);
       }
     }
+
+    const savedPrep = localStorage.getItem('prep_records');
+    if (savedPrep) {
+      try {
+        const parsedPrep = JSON.parse(savedPrep);
+        if (Array.isArray(parsedPrep) && parsedPrep.length > 0) {
+          const migratedPrepRecords = parsedPrep.map(r => ({
+            ...defaultPrepData,
+            ...r
+          }));
+          setPrepRecords(migratedPrepRecords);
+        }
+      } catch (e) {
+        console.error('Failed to load prep records from localStorage', e);
+      }
+    }
   }, []);
 
   // Save to localStorage when records change
   useEffect(() => {
     localStorage.setItem('visit_records', JSON.stringify(records));
   }, [records]);
+
+  useEffect(() => {
+    localStorage.setItem('prep_records', JSON.stringify(prepRecords));
+  }, [prepRecords]);
 
   const [copied, setCopied] = useState(false);
   const [autoSync, setAutoSync] = useState(true);
@@ -213,6 +246,20 @@ export default function App() {
     setRecords(prev => prev.filter((_, i) => i !== index));
     if (activeTabIndex >= index && activeTabIndex > 0) {
       setActiveTabIndex(activeTabIndex - 1);
+    }
+  };
+
+  const addPrepTab = () => {
+    setPrepRecords(prev => [...prev, { ...defaultPrepData }]);
+    setActivePrepTabIndex(prepRecords.length);
+  };
+
+  const removePrepTab = (index: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (prepRecords.length === 1) return;
+    setPrepRecords(prev => prev.filter((_, i) => i !== index));
+    if (activePrepTabIndex >= index && activePrepTabIndex > 0) {
+      setActivePrepTabIndex(activePrepTabIndex - 1);
     }
   };
 
@@ -552,7 +599,7 @@ export default function App() {
           
           {/* Tabs */}
           <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
-            {records.map((r, i) => (
+            {viewMode === 'record' ? records.map((r, i) => (
               <button
                 key={i}
                 onClick={() => setActiveTabIndex(i)}
@@ -571,11 +618,30 @@ export default function App() {
                   />
                 )}
               </button>
+            )) : prepRecords.map((p, i) => (
+              <button
+                key={i}
+                onClick={() => setActivePrepTabIndex(i)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  activePrepTabIndex === i 
+                  ? 'bg-white text-indigo-600 shadow-sm' 
+                  : 'text-slate-500 hover:bg-white/50'
+                }`}
+              >
+                <ClipboardCheck className="w-3 h-3" />
+                {p.providerName || `準備 ${i + 1}`}
+                {prepRecords.length > 1 && (
+                  <X 
+                    className="w-3 h-3 hover:text-red-500 transition-colors" 
+                    onClick={(e) => removePrepTab(i, e)}
+                  />
+                )}
+              </button>
             ))}
             <button 
-              onClick={addTab}
+              onClick={viewMode === 'record' ? addTab : addPrepTab}
               className="p-1.5 text-slate-400 hover:text-brand hover:bg-white rounded-lg transition-all"
-              title="新增紀錄"
+              title={viewMode === 'record' ? "新增紀錄" : "新增訪視準備"}
             >
               <Plus className="w-4 h-4" />
             </button>
@@ -766,9 +832,7 @@ export default function App() {
                           {prepData.visitCategories.includes('初次訪視') && (
                             <InputField label="第幾次初訪" value={prepData.initialVisitCount} onChange={(v) => setPrepData(prev => ({ ...prev, initialVisitCount: v }))} />
                           )}
-                          {prepData.visitCategories.includes('加強訪視') && (
-                            <InputField label="加強訪視原因" value={prepData.reinforceReason} onChange={(v) => setPrepData(prev => ({ ...prev, reinforceReason: v }))} />
-                          )}
+                          <InputField label="加強訪視原因" value={prepData.reinforceReason} onChange={(v) => setPrepData(prev => ({ ...prev, reinforceReason: v }))} />
                           
                           <div className="grid grid-cols-2 gap-4">
                             <InputField label="年度應訪視次數" value={prepData.annualVisitCount} onChange={(v) => setPrepData(prev => ({ ...prev, annualVisitCount: v }))} />
@@ -779,27 +843,22 @@ export default function App() {
                           
                           <SelectField label="是否為聯合收托" options={['是', '否']} value={prepData.isJoint} onChange={(v) => setPrepData(prev => ({ ...prev, isJoint: v }))} />
                           
-                          {prepData.isJoint === '是' && (
-                            <div className="space-y-4 pt-4 border-t border-slate-200">
-                              <div className="grid grid-cols-2 gap-4">
-                                <InputField label="聯合收托人1姓名" value={prepData.jointProvider1Name} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider1Name: v }))} />
-                                <InputField label="收托幼兒" value={prepData.jointProvider1Children} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider1Children: v }))} />
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <InputField label="聯合收托人2姓名" value={prepData.jointProvider2Name} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider2Name: v }))} />
-                                <InputField label="收托幼兒" value={prepData.jointProvider2Children} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider2Children: v }))} />
-                              </div>
+                          <div className="space-y-4 pt-4 border-t border-slate-200">
+                            <div className="grid grid-cols-2 gap-4">
+                              <InputField label="聯合收托人1姓名" value={prepData.jointProvider1Name} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider1Name: v }))} />
+                              <InputField label="收托幼兒" value={prepData.jointProvider1Children} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider1Children: v }))} />
                             </div>
-                          )}
+                            <div className="grid grid-cols-2 gap-4">
+                              <InputField label="聯合收托人2姓名" value={prepData.jointProvider2Name} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider2Name: v }))} />
+                              <InputField label="收托幼兒" value={prepData.jointProvider2Children} onChange={(v) => setPrepData(prev => ({ ...prev, jointProvider2Children: v }))} />
+                            </div>
+                          </div>
                         </div>
                       )}
 
                       {title === '七、托育查核' && (
                         <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
                           <TextAreaField label="申請補助之幼兒人數及姓名、是否有未申請補助者：" value={prepData.subsidyStatus || ''} onChange={(v) => setPrepData(prev => ({ ...prev, subsidyStatus: v }))} />
-                          <InputField label="現場親見收托兒童數：" value={prepData.actualChildCountCheck || ''} onChange={(v) => setPrepData(prev => ({ ...prev, actualChildCountCheck: v }))} />
-                          <SelectField label="收托數是否符合收托資料：" options={['是', '否']} value={prepData.childCountMatch || '是'} onChange={(v) => setPrepData(prev => ({ ...prev, childCountMatch: v as '是' | '否' }))} />
-                          <SelectField label="收費是否與托育契約書一致：" options={['是', '否']} value={prepData.feeMatch || '是'} onChange={(v) => setPrepData(prev => ({ ...prev, feeMatch: v as '是' | '否' }))} />
                           <TextAreaField label="幼兒托育時間及費用" value={prepData.feeDetails || ''} onChange={(v) => setPrepData(prev => ({ ...prev, feeDetails: v }))} />
                         </div>
                       )}
@@ -1118,28 +1177,28 @@ export default function App() {
 
             <FormSection title="十四、保親關係" icon={<Heart className="w-5 h-5" />} borderColor="border-red-400" isOpen={openSections['relationship']} onToggle={() => toggleSection('relationship')} extraActions={<SectionActions sectionKeys={['dailyHandover', 'parentCooperation']} title="保親關係" />}>
               <div className="space-y-6">
-                <TextAreaField label="十四-1. 每日交接方式" value={record.dailyHandover} onChange={(v) => updateField('dailyHandover', v)} />
-                <TextAreaField label="十四-2. 保親合作狀況" value={record.parentCooperation} onChange={(v) => updateField('parentCooperation', v)} />
+                <TextAreaField label="每日交接方式" value={record.dailyHandover} onChange={(v) => updateField('dailyHandover', v)} />
+                <TextAreaField label="保親合作狀況" value={record.parentCooperation} onChange={(v) => updateField('parentCooperation', v)} />
               </div>
             </FormSection>
 
             <FormSection title="十五、托育人員現況" icon={<User className="w-5 h-5" />} borderColor="border-orange-400" isOpen={openSections['providerStatus']} onToggle={() => toggleSection('providerStatus')} extraActions={<SectionActions sectionKeys={['providerHealthSelf', 'visitorEval', 'visitorEvalReasons', 'visitorEvalOther', 'familyHealth', 'familyHealthReason', 'familyHealthDesc', 'familySupport', 'familySupportDesc', 'workImpactFamily', 'workImpactFamilyDesc']} title="托育人員現況" />}>
               <div className="space-y-6">
-                <TextAreaField label="十五-1. 托育人員自述健康狀況" value={record.providerHealthSelf} onChange={(v) => updateField('providerHealthSelf', v)} />
+                <TextAreaField label="托育人員自述健康狀況" value={record.providerHealthSelf} onChange={(v) => updateField('providerHealthSelf', v)} />
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="十五-2. 訪員評估" options={['正常', '異常']} value={record.visitorEval} onChange={(v) => updateField('visitorEval', v)} />
+                  <SelectField label="訪員評估" options={['正常', '異常']} value={record.visitorEval} onChange={(v) => updateField('visitorEval', v)} />
                   {record.visitorEval === '異常' && <MultiSelectField label="異常原因" options={['呈現焦慮與壓力感', '呈現衝動與控制力較差', '表情冷漠或社交退縮', '有獨留兒童在家之風險', '同住家人關係衝突']} values={record.visitorEvalReasons} onChange={(v) => updateField('visitorEvalReasons', v)} allowOther otherValue={record.visitorEvalOther} onOtherChange={(v) => updateField('visitorEvalOther', v)} />}
                 </div>
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="十五-3. 同住成員身心狀況" options={['無明顯異常', '尚可', '無同住成員', '訪視未遇家庭成員', '不佳']} value={record.familyHealth} onChange={(v) => updateField('familyHealth', v)} />
+                  <SelectField label="同住成員身心狀況" options={['無明顯異常', '尚可', '無同住成員', '訪視未遇家庭成員', '不佳']} value={record.familyHealth} onChange={(v) => updateField('familyHealth', v)} />
                   <TextAreaField label="說明" value={record.familyHealthDesc} onChange={(v) => updateField('familyHealthDesc', v)} placeholder="請輸入說明..." />
                 </div>
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="十五-4. 同住成員是否支持" options={['是', '否']} value={record.familySupport} onChange={(v) => updateField('familySupport', v)} />
+                  <SelectField label="同住成員是否支持" options={['是', '否']} value={record.familySupport} onChange={(v) => updateField('familySupport', v)} />
                   <TextAreaField label="說明" value={record.familySupportDesc} onChange={(v) => updateField('familySupportDesc', v)} placeholder="請輸入說明..." />
                 </div>
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="十五-5. 托育工作是否影響家庭" options={['是', '否']} value={record.workImpactFamily} onChange={(v) => updateField('workImpactFamily', v)} />
+                  <SelectField label="托育工作是否影響家庭" options={['是', '否']} value={record.workImpactFamily} onChange={(v) => updateField('workImpactFamily', v)} />
                   <TextAreaField label="說明" value={record.workImpactFamilyDesc} onChange={(v) => updateField('workImpactFamilyDesc', v)} placeholder="請輸入說明..." />
                 </div>
               </div>
@@ -1302,7 +1361,7 @@ export default function App() {
             ) : (
               <div className="text-slate-400 text-[10px] font-medium flex items-center gap-2 bg-white/80 backdrop-blur px-3 py-1 rounded-full shadow-sm">
                 <Settings className="w-3 h-3" />
-                訪視準備清單為系統自動生成，不可手動編輯
+                訪視準備清單為系統自動生成，建議輸出成word檔後自行編輯成自己的版本
               </div>
             )}
           </div>
