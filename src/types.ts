@@ -135,8 +135,9 @@ export interface VisitRecord {
   childStatuses: ChildStatus[];
 
   // 十一、托育環境
-  envCheckResult: CheckResult;
+  envCheckResult: CheckResult | '本次未環評';
   envCheckReason: string;
+  envCheckNotEvalReason: string;
   envFacilities: string[];
   envFacilitiesOther: string;
   envComfort: string[];
@@ -171,6 +172,8 @@ export interface VisitRecord {
   envClean: string;
   envCleanOther: string;
   envCleanDesc: string;
+  batheChild: '是' | '否' | '';
+  batheChildDesc: string;
   qualityDesc: string;
   qualityCheckResult: CheckResult;
   qualityCheckItems: string[];
@@ -337,6 +340,7 @@ export const initialRecord: VisitRecord = {
   childStatuses: [initialChildStatus],
   envCheckResult: '',
   envCheckReason: '',
+  envCheckNotEvalReason: '',
   envFacilities: [],
   envFacilitiesOther: '',
   envComfort: [],
@@ -369,6 +373,8 @@ export const initialRecord: VisitRecord = {
   envClean: '',
   envCleanOther: '',
   envCleanDesc: '',
+  batheChild: '',
+  batheChildDesc: '',
   qualityDesc: '',
   qualityCheckResult: '',
   qualityCheckItems: [],

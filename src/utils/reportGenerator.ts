@@ -158,19 +158,20 @@ export const generateVisitReport = (record: VisitRecord): string => {
     record.unitName ? `► 單位：${record.unitName}` : '',
     record.subsidyChildCount ? `► 補助人數：${record.subsidyChildCount}人` : '',
     record.subsidyChildNames ? `► 姓名：${record.subsidyChildNames}` : '',
-    record.hasNoSubsidyChild ? `► 是否有未申請補助幼兒：${record.hasNoSubsidyChild}${record.hasNoSubsidyChild === '是' ? ` (原因：${record.noSubsidyInfo})` : ''}` : '',
+    record.hasNoSubsidyChild ? `► 是否有未申請補助幼兒：${record.hasNoSubsidyChild}${record.hasNoSubsidyChild === '是' && record.noSubsidyInfo ? `（${record.noSubsidyInfo}）` : ''}` : '',
     record.actualChildCount ? `► 實際收托：${record.actualChildCount} 人` : '',
-    record.siteCheckResult ? `► 訪視現場親見幼兒與收托資料：${record.siteCheckResult}${record.siteCheckResult === '不符合' ? ` (原因：${record.siteCheckReason})` : ''}` : '',
+    record.siteCheckResult ? `► 訪視現場親見幼兒與收托資料：${record.siteCheckResult}${record.siteCheckResult === '不符合' && record.siteCheckReason ? `（${record.siteCheckReason}）` : ''}` : '',
     record.feeCheckResult ? `► 托育人員收費是否與托育契約一致：${record.feeCheckResult}${record.feeCheckResult === '否' ? ` (原因：${record.feeCheckReason})` : ''}` : '',
     record.feeDetails ? `► 幼兒托育時間及費用：<br/>${nl2br(record.feeDetails)}` : ''
   ].filter(Boolean).join('<br/>');
 
   const envInfo = [
-    record.envCheckResult ? `► 托育環境安全檢核：${record.envCheckResult}${record.envCheckResult === '不符合' ? ` (原因：${record.envCheckReason})` : ''}` : '',
+    record.envCheckResult ? `► 托育環境安全檢核：${record.envCheckResult === '本次未環評' ? `未環評${record.envCheckNotEvalReason ? `（${record.envCheckNotEvalReason}）` : ''}` : `${record.envCheckResult}${record.envCheckResult === '不符合' ? ` (原因：${record.envCheckReason})` : ''}`}` : '',
     record.envCheckItems && record.envCheckItems.length > 0 ? `► 不符合指標：<br/>${record.envCheckItems.join('<br/>')}` : '',
     record.envFacilities.length > 0 ? `► 設施設備：${multiOtherS(record.envFacilities, record.envFacilitiesOther)}` : '',
     record.envComfort.length > 0 ? `► 舒適度：${multiOtherS(record.envComfort, record.envComfortOther)}` : '',
-    record.noSmokingResult ? `► 禁菸標誌：${record.noSmokingResult}${record.noSmokingResult === '不符合' ? ` (說明：${record.noSmokingDesc})` : ''}` : ''
+    record.noSmokingResult ? `► 禁菸標誌：${record.noSmokingResult}${record.noSmokingResult === '不符合' ? ` (說明：${record.noSmokingDesc})` : ''}` : '',
+    record.envDesc ? `► 托育環境說明：<br/>${nl2br(record.envDesc)}` : ''
   ].filter(Boolean).join('<br/>');
 
   const qualityInfo = [
@@ -185,6 +186,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
     record.childCleanAfterMeal ? `► 用餐完幼兒清潔（擦臉、刷牙）：${record.childCleanAfterMeal}` : '',
     record.toyClean ? `► 教玩具清潔：${otherS(record.toyClean, record.toyCleanOther)}${record.toyClean === '不符合' ? ` (說明：${record.toyCleanDesc})` : ''}` : '',
     record.envClean ? `► 環境衛生：${otherS(record.envClean, record.envCleanOther)}${record.envClean === '不符合' ? ` (說明：${record.envCleanDesc})` : ''}` : '',
+    record.batheChild ? `► 托育人員是否幫幼兒洗澡：${record.batheChild}${record.batheChildDesc ? `（${record.batheChildDesc}）` : ''}` : '',
     record.qualityCheckResult ? `► 照顧品質評估指標檢核：${record.qualityCheckResult}` : '',
     record.qualityCheckItems && record.qualityCheckItems.length > 0 ? `► 不符合指標：<br/>${record.qualityCheckItems.join('<br/>')}` : '',
     record.qualityCheckReason ? `► 不符合原因說明：<br/>${nl2br(record.qualityCheckReason)}` : '',
