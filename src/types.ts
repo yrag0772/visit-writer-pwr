@@ -5,7 +5,7 @@ export type CheckResult = '符合' | '不符合' | '';
 export type YesNo = '是' | '否' | '';
 export type HasNo = '有' | '無' | '';
 export type ChildAttendance = '是' | '無托兒' | '';
-export type NormalAbnormal = '正常' | '異常' | '無明顯異常' | '其他' | '';
+export type NormalAbnormal = '正常' | '異常' | '無明顯異常' | '無明顯風險' | '其他' | '';
 
 export interface ChildInfo {
   status: string;
@@ -40,6 +40,7 @@ export interface ChildStatus {
   sleepSafe: string;
   sleepStatus: string[];
   sleepStatusOther: string;
+  sleepStatusDesc: string;
   sleepPosture: string;
   sleepPostureOther: string;
   sleepNonBackGuidance: string;
@@ -62,6 +63,7 @@ export interface ChildStatus {
   dietDesc: string;
   dietTypes: string[];
   dietTypesOther: string;
+  dietTypesDesc: string;
   dietContent: string;
   dietStatus: string[];
   dietStatusOther: string;
@@ -153,8 +155,10 @@ export interface VisitRecord {
   routineOther: string;
   activities: string[];
   activitiesOther: string;
+  activitiesDesc: string;
   mealPrep: string[];
   mealPrepOther: string;
+  mealPrepDesc: string;
   dietQuality: CheckResult;
   dietQualityDesc: string;
   dietQualityOther: string;
@@ -260,6 +264,7 @@ export const initialChildStatus: ChildStatus = {
   sleepSafe: '',
   sleepStatus: [],
   sleepStatusOther: '',
+  sleepStatusDesc: '',
   sleepPosture: '',
   sleepPostureOther: '',
   sleepNonBackGuidance: '',
@@ -282,6 +287,7 @@ export const initialChildStatus: ChildStatus = {
   dietDesc: '',
   dietTypes: [],
   dietTypesOther: '',
+  dietTypesDesc: '',
   dietContent: '',
   dietStatus: [],
   dietStatusOther: '',
@@ -354,8 +360,10 @@ export const initialRecord: VisitRecord = {
   routineOther: '',
   activities: [],
   activitiesOther: '',
+  activitiesDesc: '',
   mealPrep: [],
   mealPrepOther: '',
+  mealPrepDesc: '',
   dietQuality: '',
   dietQualityDesc: '',
   dietQualityOther: '',

@@ -1,14 +1,6 @@
 import { VisitRecord } from '../types';
 
-export const generateVisitReport = (record: VisitRecord): string => {
-  const nl2br = (str: string | undefined | null) => str ? str.replace(/\n/g, '<br/>') : '';
-  const s = (str: string | undefined | null) => str || '未填寫';
-  const otherS = (val: string | undefined | null, other: string | undefined | null) => val === '其他' ? (other || '未說明') : (val || '未填寫');
-  const multiOtherS = (vals: string[], other: string | undefined | null) => {
-    if (!vals || vals.length === 0) return '未填寫';
-    return vals.map(v => v === '其他' ? (other || '未說明') : v).join('、');
-  };
-
+export const getFollowUpItems = (record: VisitRecord) => {
   const followUpItems: { target: string, label: string, status: string }[] = [];
 
   if (record.siteCheckResult === '不符合') followUpItems.push({ target: '托育查核', label: '訪視現場親見幼兒與收托資料', status: '不符合' });
@@ -21,6 +13,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
   if (record.mealWay === '不符合') followUpItems.push({ target: '托育品質', label: '餵食或用餐方式', status: '不符合' });
   if (record.toyClean === '不符合') followUpItems.push({ target: '托育品質', label: '教玩具、寢具清潔', status: '不符合' });
   if (record.envClean === '不符合') followUpItems.push({ target: '托育品質', label: '環境衛生整潔', status: '不符合' });
+  if (record.qualityCheckResult === '不符合') followUpItems.push({ target: '托育品質', label: '照顧品質評估指標檢核', status: '不符合' });
   if (record.fourChildCheckResult === '不符合') followUpItems.push({ target: '托育品質', label: '居家托育人員收托4名兒童訪視檢核表', status: '不符合' });
   if (record.gameInteraction === '否') followUpItems.push({ target: '托育人員與托兒間互動與社會行為', label: '能與幼兒經常進行遊戲互動', status: '否' });
   if (record.positiveResponse === '否') followUpItems.push({ target: '托育人員與托兒間互動與社會行為', label: '能敏銳、正向、溫暖親切的回應幼兒', status: '否' });
@@ -30,7 +23,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
   if (record.familySupport === '否') followUpItems.push({ target: '托育人員現況', label: '同住成員是否支持', status: '否' });
   if (record.workImpactFamily === '是') followUpItems.push({ target: '托育人員現況', label: '托育工作是否影響家庭', status: '是' });
 
-  record.childStatuses.forEach((c) => {
+  record.childStatuses?.forEach((c) => {
     const name = c.name || '未命名幼兒';
     if (c.hasLog === '無') followUpItems.push({ target: name, label: '寶寶日誌', status: '無' });
     if (c.health === '異常') followUpItems.push({ target: name, label: '健康狀況', status: '異常' });
@@ -41,6 +34,18 @@ export const generateVisitReport = (record: VisitRecord): string => {
     if (c.devCheck === '異常') followUpItems.push({ target: name, label: '發展檢核', status: '異常' });
     if (c.interaction === '異常') followUpItems.push({ target: name, label: '互動情形', status: '異常' });
   });
+
+  return followUpItems;
+};
+
+export const generateVisitReport = (record: VisitRecord): string => {
+  const nl2br = (str: string | undefined | null) => str ? str.replace(/\n/g, '<br/>') : '';
+  const s = (str: string | undefined | null) => str || '未填寫';
+  const otherS = (val: string | undefined | null, other: string | undefined | null) => val === '其他' ? (other || '未說明') : (val || '未填寫');
+  const multiOtherS = (vals: string[], other: string | undefined | null) => {
+    if (!vals || vals.length === 0) return '未填寫';
+    return vals.map(v => v === '其他' ? (other || '未說明') : v).join('、');
+  };
 
   const childrenList = !record.hasChildren 
     ? null
@@ -77,7 +82,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
         ].filter(Boolean).join(' / ');
 
         const sleepInfoParts = [
-          c.sleepStatus.length > 0 ? `${c.sleepStatus.map(v => v === '其他' ? c.sleepStatusOther : v).join('、')}` : '',
+          (c.sleepStatus.length > 0 || c.sleepStatusDesc) ? `${c.sleepStatus.length > 0 ? c.sleepStatus.map(v => v === '其他' ? c.sleepStatusOther : v).join('、') : ''}${c.sleepStatusDesc ? `（${c.sleepStatusDesc}）` : ''}` : '',
           c.sleepPosture ? `睡姿: ${otherS(c.sleepPosture, c.sleepPostureOther)}${c.sleepPosture === '一歲以下幼兒非仰睡（應輔導）' ? ` (輔導：${s(c.sleepNonBackGuidance)})` : ''}` : '',
           c.sleepTime ? `時間: ${c.sleepTime}` : '',
           c.sleepArea ? `區域: ${c.sleepArea}` : '',
@@ -85,17 +90,16 @@ export const generateVisitReport = (record: VisitRecord): string => {
         ].filter(Boolean);
 
         const dietInfoParts = [
-          c.dietTypes.length > 0 ? `餐食型態: ${c.dietTypes.map(v => v === '其他' ? c.dietTypesOther : v).join('、')}` : '',
+          (c.dietTypes.length > 0 || c.dietTypesDesc) ? `餐食型態: ${c.dietTypes.length > 0 ? c.dietTypes.map(v => v === '其他' ? c.dietTypesOther : v).join('、') : ''}${c.dietTypesDesc ? `（${c.dietTypesDesc}）` : ''}` : '',
           c.dietContent ? `內容: ${c.dietContent}` : '',
-          c.dietStatus.length > 0 ? `${c.dietStatus.map(v => v === '其他' ? c.dietStatusOther : v).join('、')}` : '',
-          c.dietDesc ? `描述: ${c.dietDesc}` : ''
+          (c.dietStatus.length > 0 || c.dietDesc) ? `${c.dietStatus.length > 0 ? c.dietStatus.map(v => v === '其他' ? c.dietStatusOther : v).join('、') : ''}${c.dietDesc ? `（${c.dietDesc}）` : ''}` : ''
         ].filter(Boolean);
 
         const devCheckParts = [
-          c.devCheck ? `${otherS(c.devCheck, c.devCheckOther)}` : '',
+          c.devCheck ? `${otherS(c.devCheck, c.devCheckOther).replace('本階段已施作（應確認先前施作時間）', '本階段已施作')}` : '',
           c.devStage ? `階段: ${c.devStage}` : '',
           c.devReport ? `發展異常通報: ${s(c.devReport)}${c.devReport === '已通報' ? ` (${c.devReportTime})` : ` (${c.devReportReason})`}` : '',
-          c.devPrevDate ? `先前日期: ${c.devPrevDate}` : ''
+          c.devPrevDate ? `先前施作日期: ${c.devPrevDate}` : ''
         ].filter(Boolean);
 
         const lines = [
@@ -177,15 +181,15 @@ export const generateVisitReport = (record: VisitRecord): string => {
   const qualityInfo = [
     (record.routineCheck || record.routineOther) ? `► 基本作息與活動時間：${record.routineCheck}${record.routineCheck && record.routineOther ? '／' : ''}${record.routineOther}` : '',
     record.routineDesc ? `► 輔導措施說明：${record.routineDesc}` : '',
-    record.activities.length > 0 ? `► 教玩具活動：${multiOtherS(record.activities, record.activitiesOther)}` : '',
-    record.mealPrep.length > 0 ? `► 備餐方式及時間：${multiOtherS(record.mealPrep, record.mealPrepOther)}` : '',
+    (record.activities.length > 0 || record.activitiesDesc) ? `► 教玩具活動：${record.activities.length > 0 ? multiOtherS(record.activities, record.activitiesOther) : ''}${record.activitiesDesc ? `（${record.activitiesDesc}）` : ''}` : '',
+    (record.mealPrep.length > 0 || record.mealPrepDesc) ? `► 備餐方式及時間：${record.mealPrep.length > 0 ? multiOtherS(record.mealPrep, record.mealPrepOther) : ''}${record.mealPrepDesc ? `（${record.mealPrepDesc}）` : ''}` : '',
     (record.dietQuality || record.dietQualityOther) ? `► 依兒童年齡提供多樣化飲食：${record.dietQuality}${record.dietQuality && record.dietQualityOther ? '／' : ''}${record.dietQualityOther}` : '',
     (record.mealSpace || record.mealSpaceOther) ? `► 用餐空間、用品合宜且足夠：${record.mealSpace}${record.mealSpace && record.mealSpaceOther ? '／' : ''}${record.mealSpaceOther}` : '',
     (record.mealWay || record.mealWayOther) ? `► 適齡的餵食或用餐方式：${record.mealWay}${record.mealWay && record.mealWayOther ? '／' : ''}${record.mealWayOther}` : '',
     record.mealCleanProcess ? `► 用餐後環境清潔流程：${record.mealCleanProcess}` : '',
     record.childCleanAfterMeal ? `► 用餐完幼兒清潔（擦臉、刷牙）：${record.childCleanAfterMeal}` : '',
-    record.toyClean ? `► 教玩具清潔：${otherS(record.toyClean, record.toyCleanOther)}${record.toyClean === '不符合' ? ` (說明：${record.toyCleanDesc})` : ''}` : '',
-    record.envClean ? `► 環境衛生：${otherS(record.envClean, record.envCleanOther)}${record.envClean === '不符合' ? ` (說明：${record.envCleanDesc})` : ''}` : '',
+    (record.toyClean || record.toyCleanDesc) ? `► 教玩具清潔：${record.toyClean ? otherS(record.toyClean, record.toyCleanOther) : ''}${record.toyCleanDesc ? `（${record.toyCleanDesc}）` : ''}` : '',
+    (record.envClean || record.envCleanDesc) ? `► 環境衛生：${record.envClean ? otherS(record.envClean, record.envCleanOther) : ''}${record.envCleanDesc ? `（${record.envCleanDesc}）` : ''}` : '',
     record.batheChild ? `► 托育人員是否幫幼兒洗澡：${record.batheChild}${record.batheChildDesc ? `（${record.batheChildDesc}）` : ''}` : '',
     record.qualityCheckResult ? `► 照顧品質評估指標檢核：${record.qualityCheckResult}` : '',
     record.qualityCheckItems && record.qualityCheckItems.length > 0 ? `► 不符合指標：<br/>${record.qualityCheckItems.join('<br/>')}` : '',
@@ -234,10 +238,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
     }).filter(Boolean).join('<br/>');
   };
 
-  const finalNextFollowUp = [
-    record.nextFollowUpFocus ? nl2br(record.nextFollowUpFocus) : '',
-    followUpItems.length > 0 ? `<br/><strong>待追蹤項目：</strong><br/>${followUpItems.map(item => `• ${item.target}：${item.label} (${item.status})`).join('<br/>')}` : ''
-  ].filter(Boolean).join('');
+  const finalNextFollowUp = record.nextFollowUpFocus ? nl2br(record.nextFollowUpFocus) : '';
 
   return `
     <div style="font-family: 'Microsoft JhengHei', sans-serif; line-height: 1.6; color: #333;">

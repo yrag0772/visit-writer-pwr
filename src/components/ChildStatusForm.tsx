@@ -168,6 +168,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                   otherValue={s.sleepStatusOther}
                   onOtherChange={(v) => updateStatus(index, 'sleepStatusOther', v)}
                 />
+                <TextAreaField label="睡眠情形說明" value={s.sleepStatusDesc} onChange={(v) => updateStatus(index, 'sleepStatusDesc', v)} />
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-4">
                     <SelectField 
@@ -253,6 +254,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                   otherValue={s.dietTypesOther}
                   onOtherChange={(v) => updateStatus(index, 'dietTypesOther', v)}
                 />
+                <TextAreaField label="餐食型態說明" value={s.dietTypesDesc} onChange={(v) => updateStatus(index, 'dietTypesDesc', v)} />
                 <InputField label="餐點內容" value={s.dietContent} onChange={(v) => updateStatus(index, 'dietContent', v)} hint="例如蔬菜、魚、肉、蛋等" />
                 <MultiSelectField 
                   label="飲食狀況" 
@@ -263,7 +265,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                   otherValue={s.dietStatusOther}
                   onOtherChange={(v) => updateStatus(index, 'dietStatusOther', v)}
                 />
-                <TextAreaField label="飲食狀況描述" value={s.dietDesc} onChange={(v) => updateStatus(index, 'dietDesc', v)} />
+                <TextAreaField label="飲食狀況說明" value={s.dietDesc} onChange={(v) => updateStatus(index, 'dietDesc', v)} />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
