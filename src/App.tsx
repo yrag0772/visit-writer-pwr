@@ -571,7 +571,8 @@ export default function App() {
     
     // Optimized filename: Category_ProviderName_Timestamp.doc
     const category = viewMode === 'prep' ? '訪視準備' : (record.visitCategories.length > 0 ? record.visitCategories[0] : '訪視紀錄');
-    const fileName = `${category}_${record.providerName || '未命名'}_${timestamp}.doc`;
+    const providerName = viewMode === 'prep' ? (prepData.providerName || '未命名') : (record.providerName || '未命名');
+    const fileName = `${category}_${providerName}_${timestamp}.doc`;
     
     fileLink.download = fileName;
     fileLink.click();
