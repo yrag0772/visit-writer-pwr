@@ -369,13 +369,18 @@ export default function App() {
     const now = new Date();
     const timestamp = now.getFullYear() + 
       String(now.getMonth() + 1).padStart(2, '0') + 
-      String(now.getDate()).padStart(2, '0') + "_" +
+      String(now.getDate()).padStart(2, '0') + 
       String(now.getHours()).padStart(2, '0') + 
       String(now.getMinutes()).padStart(2, '0') +
       String(now.getSeconds()).padStart(2, '0');
 
+    const visitDate = record.visitDate ? record.visitDate.replace(/-/g, '') : '未填寫日期';
+    const categories = record.visitCategories.length > 0 ? record.visitCategories.join('') : '未填寫訪視類別';
+    const providerName = record.providerName || '未命名';
+    const fileName = `${visitDate}_撰寫紀錄_${providerName}_${categories}_${timestamp}.json`;
+
     link.href = url;
-    link.download = `撰寫紀錄_${record.providerName || '未命名'}_${timestamp}.json`;
+    link.download = fileName;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -562,17 +567,24 @@ export default function App() {
       String(now.getMonth() + 1).padStart(2, '0') + 
       String(now.getDate()).padStart(2, '0') + 
       String(now.getHours()).padStart(2, '0') + 
-      String(now.getMinutes()).padStart(2, '0');
+      String(now.getMinutes()).padStart(2, '0') +
+      String(now.getSeconds()).padStart(2, '0');
 
     const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
     const fileLink = document.createElement("a");
     document.body.appendChild(fileLink);
     fileLink.href = source;
     
-    // Optimized filename: Category_ProviderName_Timestamp.doc
-    const category = viewMode === 'prep' ? '訪視準備' : (record.visitCategories.length > 0 ? record.visitCategories[0] : '訪視紀錄');
-    const providerName = viewMode === 'prep' ? (prepData.providerName || '未命名') : (record.providerName || '未命名');
-    const fileName = `${category}_${providerName}_${timestamp}.doc`;
+    let fileName = '';
+    if (viewMode === 'prep') {
+      const providerName = prepData.providerName || '未命名';
+      fileName = `訪視準備_${providerName}_${timestamp}.doc`;
+    } else {
+      const visitDate = record.visitDate ? record.visitDate.replace(/-/g, '') : '未填寫日期';
+      const categories = record.visitCategories.length > 0 ? record.visitCategories.join('') : '未填寫訪視類別';
+      const providerName = record.providerName || '未命名';
+      fileName = `${visitDate}_訪視紀錄_${providerName}_${categories}_${timestamp}.doc`;
+    }
     
     fileLink.download = fileName;
     fileLink.click();
