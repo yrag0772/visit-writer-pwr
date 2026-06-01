@@ -39,6 +39,7 @@ export default function App() {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [isOutlineOpen, setIsOutlineOpen] = useState(true);
   const [activeSection, setActiveSection] = useState<string>('');
+  const [autoTrackSection, setAutoTrackSection] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [viewMode, setViewMode] = useState<'record' | 'prep'>('record');
   const [prepRecords, setPrepRecords] = useState<PrepData[]>([{ ...defaultPrepData }]);
@@ -502,36 +503,46 @@ export default function App() {
     return { isFilled, hasIssues };
   };
 
+  const scrollToWordSection = (title: string, behavior: ScrollBehavior = 'smooth') => {
+    if (!title || !editorRef.current) return;
+    
+    let shortTitle = title.split('、')[1];
+    if (shortTitle === '前次輔導追蹤') {
+      shortTitle = '前次輔導建議事項追蹤與回應';
+    }
+    
+    if (shortTitle) {
+      // Find the section by ID
+      const wordEl = editorRef.current.querySelector(`#word-section-${shortTitle}`);
+      if (wordEl) {
+        wordEl.scrollIntoView({ behavior: behavior, block: 'start' });
+      } else {
+        // Fallback
+        const headers = editorRef.current.querySelectorAll('h3');
+        for (const h of Array.from(headers) as HTMLElement[]) {
+          if (h.textContent?.includes(shortTitle)) {
+            h.scrollIntoView({ behavior: behavior, block: 'start' });
+            break;
+          }
+        }
+      }
+    }
+  };
+
   const scrollToSection = (title: string) => {
     const id = title;
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    scrollToWordSection(title, 'smooth');
+  };
 
-    // Also scroll the Word preview if possible
-    if (editorRef.current) {
-      let shortTitle = title.split('、')[1];
-      if (shortTitle === '前次輔導追蹤') {
-        shortTitle = '前次輔導建議事項追蹤與回應';
-      }
-      
-      if (shortTitle) {
-        // Find the section by ID
-        const wordEl = editorRef.current.querySelector(`#word-section-${shortTitle}`);
-        if (wordEl) {
-          wordEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-          // Fallback
-          const headers = editorRef.current.querySelectorAll('h3');
-          for (const h of Array.from(headers) as HTMLElement[]) {
-            if (h.textContent?.includes(shortTitle)) {
-              h.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              break;
-            }
-          }
-        }
-      }
+  const handleDashboardInteraction = (e: React.SyntheticEvent) => {
+    if (!autoTrackSection) return;
+    const sectionEl = (e.target as HTMLElement).closest('div[id]');
+    if (sectionEl && sectionEl.id && sectionEl.id.includes('、')) {
+      scrollToWordSection(sectionEl.id, 'smooth');
     }
   };
 
@@ -793,7 +804,12 @@ export default function App() {
             </aside>
 
         {/* Left Side: Input Form */}
-        <section className="flex-1 border-r border-slate-200 bg-slate-50/50 overflow-y-auto p-6 shadow-inner" id="scroll-container">
+        <section 
+          className="flex-1 border-r border-slate-200 bg-slate-50/50 overflow-y-auto p-6 shadow-inner" 
+          id="scroll-container"
+          onFocus={handleDashboardInteraction}
+          onClick={handleDashboardInteraction}
+        >
           <div className="max-w-2xl mx-auto space-y-6 pb-24">
             
             {viewMode === 'prep' ? (
@@ -1399,7 +1415,16 @@ export default function App() {
           
           <div className="fixed bottom-6 right-10 flex flex-col items-end gap-3 z-50">
             {viewMode === 'record' && (
-              <div className="flex items-center gap-3 bg-white/90 backdrop-blur p-3 rounded-2xl shadow-xl border border-slate-200">
+              <div className="flex items-center gap-4 bg-white/90 backdrop-blur p-3 rounded-2xl shadow-xl border border-slate-200">
+                <label className="flex items-center gap-2 text-xs font-bold text-slate-600 cursor-pointer border-r border-slate-200 pr-4">
+                  <input 
+                    type="checkbox" 
+                    checked={autoTrackSection} 
+                    onChange={(e) => setAutoTrackSection(e.target.checked)}
+                    className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  自動追蹤輸入段落
+                </label>
                 <label className="flex items-center gap-2 text-xs font-bold text-slate-600 cursor-pointer">
                   <input 
                     type="checkbox" 
@@ -1411,12 +1436,7 @@ export default function App() {
                 </label>
               </div>
             )}
-            {viewMode === 'record' ? (
-              <div className="text-slate-400 text-[10px] font-medium flex items-center gap-2 bg-white/80 backdrop-blur px-3 py-1 rounded-full shadow-sm">
-                <Settings className="w-3 h-3" />
-                右側內容可直接點擊編輯，編輯後將同步至匯出檔案
-              </div>
-            ) : (
+            {viewMode === 'prep' && (
               <div className="text-slate-400 text-[10px] font-medium flex items-center gap-2 bg-white/80 backdrop-blur px-3 py-1 rounded-full shadow-sm">
                 <Settings className="w-3 h-3" />
                 訪視準備清單為系統自動生成，建議輸出成word檔後自行編輯成自己的版本
