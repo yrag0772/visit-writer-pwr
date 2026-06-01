@@ -128,7 +128,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
   const renderSection = (title: string, content: string | null | undefined, isHtml: boolean = false) => {
     if (!content || content === '________' || (Array.isArray(content) && content.length === 0)) return '';
     return `
-      <div style="margin-bottom: 25px;">
+      <div id="word-section-${title}" style="margin-bottom: 25px;">
         <h3 style="background: #fceef4; color: #e34b87; padding: 8px 12px; border-left: 4px solid #e34b87; margin-bottom: 10px;">◎ ${title}</h3>
         ${isHtml ? content : `<p>${nl2br(content)}</p>`}
       </div>

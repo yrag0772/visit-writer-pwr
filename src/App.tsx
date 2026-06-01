@@ -511,11 +511,25 @@ export default function App() {
 
     // Also scroll the Word preview if possible
     if (editorRef.current) {
-      const headers = editorRef.current.querySelectorAll('h3');
-      for (const h of Array.from(headers) as HTMLElement[]) {
-        if (h.textContent?.includes(title.split('、')[0])) {
-          h.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          break;
+      let shortTitle = title.split('、')[1];
+      if (shortTitle === '前次輔導追蹤') {
+        shortTitle = '前次輔導建議事項追蹤與回應';
+      }
+      
+      if (shortTitle) {
+        // Find the section by ID
+        const wordEl = editorRef.current.querySelector(`#word-section-${shortTitle}`);
+        if (wordEl) {
+          wordEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          // Fallback
+          const headers = editorRef.current.querySelectorAll('h3');
+          for (const h of Array.from(headers) as HTMLElement[]) {
+            if (h.textContent?.includes(shortTitle)) {
+              h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              break;
+            }
+          }
         }
       }
     }
@@ -852,7 +866,7 @@ export default function App() {
                             <InputField label="本次為今年次第幾次" value={prepData.currentVisitCount} onChange={(v) => setPrepData(prev => ({ ...prev, currentVisitCount: v }))} />
                           </div>
                           
-                          <InputField label="說明" value={prepData.visitCountDesc} onChange={(v) => setPrepData(prev => ({ ...prev, visitCountDesc: v }))} />
+                          <TextAreaField label="說明" value={prepData.visitCountDesc} onChange={(v) => setPrepData(prev => ({ ...prev, visitCountDesc: v }))} />
                           
                           <SelectField label="是否為聯合收托" options={['是', '否']} value={prepData.isJoint} onChange={(v) => setPrepData(prev => ({ ...prev, isJoint: v }))} />
                           
@@ -947,7 +961,7 @@ export default function App() {
                   <InputField label="年度應訪視次數" value={record.annualVisitCount} onChange={(v) => updateField('annualVisitCount', v)} type="number" />
                   <InputField label="本次訪視為今年第幾次" value={record.currentVisitCount} onChange={(v) => updateField('currentVisitCount', v)} type="number" />
                 </div>
-                <InputField label="說明" value={record.visitCountDesc} onChange={(v) => updateField('visitCountDesc', v)} placeholder="訪視次數說明..." />
+                <TextAreaField label="說明" value={record.visitCountDesc} onChange={(v) => updateField('visitCountDesc', v)} placeholder="訪視次數說明..." />
 
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
                   <SelectField label="是否為聯合收托？" options={['是', '否']} value={record.isJoint} onChange={(v) => updateField('isJoint', v)} />
@@ -982,7 +996,7 @@ export default function App() {
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <InputField label="申請補助之幼兒人數" value={record.subsidyChildCount} onChange={(v) => updateField('subsidyChildCount', v)} type="number" />
-                  <InputField label="申請補助之幼兒姓名" value={record.subsidyChildNames} onChange={(v) => updateField('subsidyChildNames', v)} />
+                  <TextAreaField label="申請補助之幼兒姓名" value={record.subsidyChildNames} onChange={(v) => updateField('subsidyChildNames', v)} />
                 </div>
                 
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
@@ -1016,7 +1030,7 @@ export default function App() {
 
             {/* 八、九 */}
             <FormSection title="八、媒合需求" icon={<Info className="w-5 h-5" />} borderColor="border-slate-500" isOpen={openSections['match']} onToggle={() => toggleSection('match')} extraActions={<SectionActions sectionKeys={['matchNeeds']} title="媒合需求" />}>
-              <InputField label="八、媒合需求" value={record.matchNeeds} onChange={(v) => updateField('matchNeeds', v)} />
+              <TextAreaField label="八、媒合需求" value={record.matchNeeds} onChange={(v) => updateField('matchNeeds', v)} />
             </FormSection>
             <FormSection title="九、訪視狀況簡述" icon={<MessageSquare className="w-5 h-5" />} borderColor="border-slate-400" isOpen={openSections['statusDesc']} onToggle={() => toggleSection('statusDesc')} extraActions={<SectionActions sectionKeys={['visitStatusDesc']} title="訪視狀況簡述" />}>
               <TextAreaField label="九、訪視狀況簡述" value={record.visitStatusDesc} onChange={(v) => updateField('visitStatusDesc', v)} hint="互動、特殊狀況、拒訪、保親溝通..." />

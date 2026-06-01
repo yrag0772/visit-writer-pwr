@@ -189,20 +189,20 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                       />
                     )}
                   </div>
-                  <InputField label="睡眠時間" value={s.sleepTime} onChange={(v) => updateStatus(index, 'sleepTime', v)} />
-                  <InputField label="睡眠區域" value={s.sleepArea} onChange={(v) => updateStatus(index, 'sleepArea', v)} hint="客廳？房間？嬰兒床？..." />
-                  <InputField label="睡眠與情緒安撫" value={s.sleepSoothing} onChange={(v) => updateStatus(index, 'sleepSoothing', v)} hint="奶嘴？需抱？夜奶？" />
+                  <TextAreaField label="睡眠時間" value={s.sleepTime} onChange={(v) => updateStatus(index, 'sleepTime', v)} />
+                  <TextAreaField label="睡眠區域" value={s.sleepArea} onChange={(v) => updateStatus(index, 'sleepArea', v)} hint="客廳？房間？嬰兒床？..." />
+                  <TextAreaField label="睡眠與情緒安撫" value={s.sleepSoothing} onChange={(v) => updateStatus(index, 'sleepSoothing', v)} hint="奶嘴？需抱？夜奶？" />
                 </div>
               </div>
 
               <div className="space-y-4 p-4 bg-green-50/50 rounded-xl border border-green-100">
                 <h4 className="text-sm font-bold text-green-800">清潔盥洗</h4>
-                <div className="grid grid-cols-3 gap-4">
-                  <InputField label="換尿布頻率" value={s.diaperFreq} onChange={(v) => updateStatus(index, 'diaperFreq', v)} />
-                  <InputField label="洗澡、清洗屁屁（多位托兒如何安排）" value={s.bathCleaning} onChange={(v) => updateStatus(index, 'bathCleaning', v)} />
-                  <InputField label="是否如廁練習" value={s.toiletTraining} onChange={(v) => updateStatus(index, 'toiletTraining', v)} hint="托兒已能如廁前表達" />
+                <div className="grid grid-cols-1 gap-4">
+                  <TextAreaField label="換尿布頻率" value={s.diaperFreq} onChange={(v) => updateStatus(index, 'diaperFreq', v)} />
+                  <TextAreaField label="洗澡、清洗屁屁（多位托兒如何安排）" value={s.bathCleaning} onChange={(v) => updateStatus(index, 'bathCleaning', v)} />
+                  <TextAreaField label="是否如廁練習" value={s.toiletTraining} onChange={(v) => updateStatus(index, 'toiletTraining', v)} hint="托兒已能如廁前表達" />
                 </div>
-                <InputField label="清潔盥洗其他說明" value={s.cleaningOther} onChange={(v) => updateStatus(index, 'cleaningOther', v)} />
+                <TextAreaField label="清潔盥洗其他說明" value={s.cleaningOther} onChange={(v) => updateStatus(index, 'cleaningOther', v)} />
               </div>
 
               <div className="space-y-4 p-4 bg-purple-50/50 rounded-xl border border-purple-100">
@@ -255,7 +255,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                   onOtherChange={(v) => updateStatus(index, 'dietTypesOther', v)}
                 />
                 <TextAreaField label="餐食型態說明" value={s.dietTypesDesc} onChange={(v) => updateStatus(index, 'dietTypesDesc', v)} />
-                <InputField label="餐點內容" value={s.dietContent} onChange={(v) => updateStatus(index, 'dietContent', v)} hint="例如蔬菜、魚、肉、蛋等" />
+                <TextAreaField label="餐點內容" value={s.dietContent} onChange={(v) => updateStatus(index, 'dietContent', v)} hint="例如蔬菜、魚、肉、蛋等" />
                 <MultiSelectField 
                   label="飲食狀況" 
                   options={['在固定位置用餐', '把食物吃光', '會自己進食（可用手）', '會使用餐具', '沒有偏食', '願意嘗試新食物', '用杯子喝水或奶', '托育人員餵食，狀況正常']} 
