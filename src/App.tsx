@@ -1108,8 +1108,8 @@ export default function App() {
                   <SelectField label="5.2 適齡的餵食或用餐方式（若收托2位以上托兒，請說明餵食流程）" options={['符合', '不符合']} value={record.mealWay} onChange={(v) => updateField('mealWay', v)} />
                   <TextAreaField label="現況及說明" value={record.mealWayOther} onChange={(v) => updateField('mealWayOther', v)} placeholder="請輸入說明..." />
                 </div>
-                <InputField label="5.3 用餐後環境清潔流程：" value={record.mealCleanProcess} onChange={(v) => updateField('mealCleanProcess', v)} />
-                <InputField label="5.4 用餐完幼兒清潔（擦臉、刷牙）：" value={record.childCleanAfterMeal} onChange={(v) => updateField('childCleanAfterMeal', v)} />
+                <TextAreaField label="5.3 用餐後環境清潔流程：" value={record.mealCleanProcess} onChange={(v) => updateField('mealCleanProcess', v)} />
+                <TextAreaField label="5.4 用餐完幼兒清潔（擦臉、刷牙）：" value={record.childCleanAfterMeal} onChange={(v) => updateField('childCleanAfterMeal', v)} />
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
