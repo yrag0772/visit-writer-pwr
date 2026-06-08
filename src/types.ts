@@ -52,7 +52,7 @@ export interface ChildStatus {
   bathCleaning: string;
   toiletTraining: string;
   cleaningOther: string;
-  devCheck: '正常' | '異常' | '未滿3個月14天，無法施作' | '本階段已施作' | '其他' | '';
+  devCheck: '正常' | '異常' | '未滿3個月16天，無法施作' | '本階段已施作' | '其他' | '';
   devCheckOther: string;
   devStage: string;
   devReport: '已通報' | '未通報' | '';

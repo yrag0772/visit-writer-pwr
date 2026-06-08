@@ -208,7 +208,7 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
               <div className="space-y-4 p-4 bg-purple-50/50 rounded-xl border border-purple-100">
                 <SelectField 
                   label="督導托育人員施作發展檢核" 
-                  options={['正常', '異常', '未滿3個月14天，無法施作', '本階段已施作（應確認先前施作時間）']} 
+                  options={['正常', '異常', '未滿3個月16天，無法施作', '本階段已施作（應確認先前施作時間）']} 
                   value={s.devCheck} 
                   onChange={(v) => updateStatus(index, 'devCheck', v)}
                   allowOther
