@@ -1246,7 +1246,7 @@ export default function App() {
                   {record.visitorEval === '異常' && <MultiSelectField label="異常原因" options={['呈現焦慮與壓力感', '呈現衝動與控制力較差', '表情冷漠或社交退縮', '有獨留兒童在家之風險', '同住家人關係衝突']} values={record.visitorEvalReasons} onChange={(v) => updateField('visitorEvalReasons', v)} allowOther otherValue={record.visitorEvalOther} onOtherChange={(v) => updateField('visitorEvalOther', v)} />}
                 </div>
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="同住成員身心狀況" options={['無明顯異常', '尚可', '無同住成員', '訪視未遇家庭成員', '不佳']} value={record.familyHealth} onChange={(v) => updateField('familyHealth', v)} />
+                  <SelectField label="同住成員身心狀況與家庭狀況" options={['無明顯異常', '尚可', '無同住成員', '訪視未遇家庭成員', '不佳']} value={record.familyHealth} onChange={(v) => updateField('familyHealth', v)} />
                   <TextAreaField label="說明" value={record.familyHealthDesc} onChange={(v) => updateField('familyHealthDesc', v)} placeholder="請輸入說明..." />
                 </div>
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">

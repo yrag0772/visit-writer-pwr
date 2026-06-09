@@ -19,7 +19,7 @@ export const getFollowUpItems = (record: VisitRecord) => {
   if (record.positiveResponse === '否') followUpItems.push({ target: '托育人員與托兒間互動與社會行為', label: '能敏銳、正向、溫暖親切的回應幼兒', status: '否' });
   if (record.socialDevSupport === '否') followUpItems.push({ target: '托育人員與托兒間互動與社會行為', label: '能藉由對幼兒間互動和合作的協助來促進其社會發展', status: '否' });
   if (record.visitorEval === '異常') followUpItems.push({ target: '托育人員現況', label: '訪員評估', status: '異常' });
-  if (record.familyHealth === '不佳') followUpItems.push({ target: '托育人員現況', label: '同住成員身心狀況', status: '不佳' });
+  if (record.familyHealth === '不佳') followUpItems.push({ target: '托育人員現況', label: '同住成員身心狀況與家庭狀況', status: '不佳' });
   if (record.familySupport === '否') followUpItems.push({ target: '托育人員現況', label: '同住成員是否支持', status: '否' });
   if (record.workImpactFamily === '是') followUpItems.push({ target: '托育人員現況', label: '托育工作是否影響家庭', status: '是' });
 
@@ -215,7 +215,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
   const providerStatusInfo = [
     record.providerHealthSelf ? `► 健康自述：${record.providerHealthSelf}` : '',
     record.visitorEval ? `► 訪員評估：${otherS(record.visitorEval, record.visitorEvalOther)}${record.visitorEval === '異常' ? ` (原因：${record.visitorEvalReasons.map(v => v === '其他' ? record.visitorEvalOther : v).join('、')})` : ''}` : '',
-    (record.familyHealth || record.familyHealthDesc) ? `► 同住成員身心：${record.familyHealth}${record.familyHealth && record.familyHealthDesc ? '／' : ''}${record.familyHealthDesc}` : '',
+    (record.familyHealth || record.familyHealthDesc) ? `► 同住成員身心狀況與家庭狀況：${record.familyHealth}${record.familyHealth && record.familyHealthDesc ? '／' : ''}${record.familyHealthDesc}` : '',
     (record.familySupport || record.familySupportDesc) ? `► 家人支持：${record.familySupport}${record.familySupport && record.familySupportDesc ? '／' : ''}${record.familySupportDesc}` : '',
     (record.workImpactFamily || record.workImpactFamilyDesc) ? `► 影響家庭：${record.workImpactFamily}${record.workImpactFamily && record.workImpactFamilyDesc ? '／' : ''}${record.workImpactFamilyDesc}` : ''
   ].filter(Boolean).join('<br/>');
