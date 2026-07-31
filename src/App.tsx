@@ -1071,7 +1071,17 @@ export default function App() {
             <FormSection title="十一、托育環境" icon={<Home className="w-5 h-5" />} borderColor="border-teal-500" isOpen={openSections['env']} onToggle={() => toggleSection('env')} extraActions={<SectionActions sectionKeys={['envCheckResult', 'envCheckReason', 'envFacilities', 'envFacilitiesOther', 'envComfort', 'envComfortOther', 'noSmokingResult', 'noSmokingDesc', 'envDesc']} title="托育環境" />}>
               <div className="space-y-6">
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="1. 托育環評 40 項檢查結果" options={['符合', '不符合', '本次未環評']} value={record.envCheckResult} onChange={(v) => updateField('envCheckResult', v)} />
+                  <SelectField 
+                    label="1. 托育環評 40 項檢查結果" 
+                    options={['符合', '不符合', '本次未環評']} 
+                    value={record.envCheckResult} 
+                    onChange={(v) => {
+                      updateField('envCheckResult', v);
+                      if (v === '符合' || v === '本次未環評') {
+                        updateField('envCheckItems', []);
+                      }
+                    }} 
+                  />
                   {record.envCheckResult === '不符合' && (
                     <div className="space-y-4 pt-2">
                       <TextAreaField label="未符合項目、原因、改善期限" value={record.envCheckReason} onChange={(v) => updateField('envCheckReason', v)} />
