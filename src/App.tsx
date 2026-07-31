@@ -1116,7 +1116,6 @@ export default function App() {
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
                   <SelectField label="1. 安排基本作息與活動時間" options={['符合', '不符合']} value={record.routineCheck} onChange={(v) => updateField('routineCheck', v)} />
                   <TextAreaField label="現況及說明" value={record.routineOther} onChange={(v) => updateField('routineOther', v)} placeholder="請輸入說明..." />
-                  {record.routineCheck === '不符合' && <TextAreaField label="輔導措施說明" value={record.routineDesc} onChange={(v) => updateField('routineDesc', v)} />}
                 </div>
                 <MultiSelectField label="2. 學習與提供適齡適性的教玩具" options={['說故事', '聽音樂', '戶外散步', '玩教玩具', '聊天', '嬰幼兒按摩', '大肌肉活動', '小肌肉活動', '自由探索']} values={record.activities} onChange={(v) => updateField('activities', v)} allowOther otherValue={record.activitiesOther} onOtherChange={(v) => updateField('activitiesOther', v)} />
                 <TextAreaField label="教玩具說明" value={record.activitiesDesc} onChange={(v) => updateField('activitiesDesc', v)} />
@@ -1154,7 +1153,18 @@ export default function App() {
                 </div>
 
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="8. 照顧品質評估指標檢核" options={['符合', '不符合']} value={record.qualityCheckResult} onChange={(v) => updateField('qualityCheckResult', v)} />
+                  <SelectField 
+                    label="8. 照顧品質評估指標檢核" 
+                    options={['符合', '不符合']} 
+                    value={record.qualityCheckResult} 
+                    onChange={(v) => {
+                      updateField('qualityCheckResult', v);
+                      if (v !== '不符合') {
+                        updateField('qualityCheckReason', '');
+                        updateField('qualityCheckItems', []);
+                      }
+                    }} 
+                  />
                   {record.qualityCheckResult === '不符合' && (
                     <div className="space-y-4 pt-2">
                       <TextAreaField 
@@ -1175,7 +1185,18 @@ export default function App() {
                 </div>
 
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="9. 居家托育人員收托4名兒童訪視檢核表" options={['符合', '不符合']} value={record.fourChildCheckResult} onChange={(v) => updateField('fourChildCheckResult', v)} />
+                  <SelectField 
+                    label="9. 居家托育人員收托4名兒童訪視檢核表" 
+                    options={['符合', '不符合']} 
+                    value={record.fourChildCheckResult} 
+                    onChange={(v) => {
+                      updateField('fourChildCheckResult', v);
+                      if (v !== '不符合') {
+                        updateField('fourChildCheckReason', '');
+                        updateField('fourChildCheckItems', []);
+                      }
+                    }} 
+                  />
                   {record.fourChildCheckResult === '不符合' && (
                     <div className="space-y-4 pt-2">
                       <TextAreaField 

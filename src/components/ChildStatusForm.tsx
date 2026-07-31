@@ -210,7 +210,20 @@ export const ChildStatusForm: React.FC<ChildStatusFormProps> = ({ statuses, onCh
                   label="督導托育人員施作發展檢核" 
                   options={['正常', '異常', '未滿3個月16天，無法施作', '本階段已施作（應確認先前施作時間）']} 
                   value={s.devCheck} 
-                  onChange={(v) => updateStatus(index, 'devCheck', v)}
+                  onChange={(v) => {
+                    const newStatuses = [...statuses];
+                    const current = { ...newStatuses[index], devCheck: v };
+                    if (v !== '異常') {
+                      current.devReport = '';
+                      current.devReportReason = '';
+                      current.devReportTime = '';
+                    }
+                    if (v !== '本階段已施作（應確認先前施作時間）') {
+                      current.devPrevDate = '';
+                    }
+                    newStatuses[index] = current;
+                    onChange(newStatuses);
+                  }}
                   allowOther
                   otherValue={s.devCheckOther}
                   onOtherChange={(v) => updateStatus(index, 'devCheckOther', v)}
