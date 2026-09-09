@@ -5,7 +5,6 @@ export const getFollowUpItems = (record: VisitRecord) => {
 
   if (record.siteCheckResult === '不符合') followUpItems.push({ target: '托育查核', label: '訪視現場親見幼兒與收托資料', status: '不符合' });
   if (record.feeCheckResult === '否') followUpItems.push({ target: '托育查核', label: '托育人員收費是否與托育契約書一致', status: '否' });
-  if (record.noSmokingResult === '不符合') followUpItems.push({ target: '托育環境', label: '確認托育地確實為全面禁菸場所', status: '不符合' });
   if (record.envCheckResult === '不符合') followUpItems.push({ target: '托育環境', label: '托育環評40項檢查結果', status: '不符合' });
   if (record.routineCheck === '不符合') followUpItems.push({ target: '托育品質', label: '基本作息與活動時間', status: '不符合' });
   if (record.dietQuality === '不符合') followUpItems.push({ target: '托育品質', label: '均衡飲食', status: '不符合' });
@@ -174,7 +173,6 @@ export const generateVisitReport = (record: VisitRecord): string => {
     record.envCheckItems && record.envCheckItems.length > 0 ? `► 不符合指標：<br/>${record.envCheckItems.join('<br/>')}` : '',
     record.envFacilities.length > 0 ? `► 設施設備：${multiOtherS(record.envFacilities, record.envFacilitiesOther)}` : '',
     record.envComfort.length > 0 ? `► 舒適度：${multiOtherS(record.envComfort, record.envComfortOther)}` : '',
-    record.noSmokingResult ? `► 禁菸標誌：${record.noSmokingResult}${record.noSmokingResult === '不符合' ? ` (說明：${record.noSmokingDesc})` : ''}` : '',
     record.envDesc ? `► 托育環境說明：<br/>${nl2br(record.envDesc)}` : ''
   ].filter(Boolean).join('<br/>');
 

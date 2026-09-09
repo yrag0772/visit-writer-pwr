@@ -1068,7 +1068,7 @@ export default function App() {
             </FormSection>
 
             {/* 十一、十二 */}
-            <FormSection title="十一、托育環境" icon={<Home className="w-5 h-5" />} borderColor="border-teal-500" isOpen={openSections['env']} onToggle={() => toggleSection('env')} extraActions={<SectionActions sectionKeys={['envCheckResult', 'envCheckReason', 'envFacilities', 'envFacilitiesOther', 'envComfort', 'envComfortOther', 'noSmokingResult', 'noSmokingDesc', 'envDesc']} title="托育環境" />}>
+            <FormSection title="十一、托育環境" icon={<Home className="w-5 h-5" />} borderColor="border-teal-500" isOpen={openSections['env']} onToggle={() => toggleSection('env')} extraActions={<SectionActions sectionKeys={['envCheckResult', 'envCheckReason', 'envFacilities', 'envFacilitiesOther', 'envComfort', 'envComfortOther', 'envDesc']} title="托育環境" />}>
               <div className="space-y-6">
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
                   <SelectField 
@@ -1102,10 +1102,6 @@ export default function App() {
                 </div>
                 <MultiSelectField label="2. 托育地設施設備" options={['充足', '合宜', '安全', '適齡']} values={record.envFacilities} onChange={(v) => updateField('envFacilities', v)} allowOther otherValue={record.envFacilitiesOther} onOtherChange={(v) => updateField('envFacilitiesOther', v)} />
                 <MultiSelectField label="3. 整體舒適度" options={['光線明亮', '無異味', '通風良好', '溫度適中']} values={record.envComfort} onChange={(v) => updateField('envComfort', v)} allowOther otherValue={record.envComfortOther} onOtherChange={(v) => updateField('envComfortOther', v)} />
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
-                  <SelectField label="4. 確認托育地確實為全面禁菸場所" options={['符合', '不符合']} value={record.noSmokingResult} onChange={(v) => updateField('noSmokingResult', v)} />
-                  {record.noSmokingResult === '不符合' && <TextAreaField label="現況及輔導措施說明" value={record.noSmokingDesc} onChange={(v) => updateField('noSmokingDesc', v)} />}
-                </div>
                 <TextAreaField label="托育環境說明" value={record.envDesc} onChange={(v) => updateField('envDesc', v)} placeholder="請輸入托育環境說明..." />
               </div>
             </FormSection>
