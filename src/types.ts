@@ -181,6 +181,7 @@ export interface VisitRecord {
   qualityDesc: string;
   qualityCheckResult: CheckResult;
   qualityCheckItems: string[];
+  qualityCheckObserve: string;
   qualityCheckReason: string;
   fourChildCheckResult: CheckResult;
   fourChildCheckItems: string[];
@@ -386,6 +387,7 @@ export const initialRecord: VisitRecord = {
   qualityDesc: '',
   qualityCheckResult: '',
   qualityCheckItems: [],
+  qualityCheckObserve: '',
   qualityCheckReason: '',
   fourChildCheckResult: '',
   fourChildCheckItems: [],

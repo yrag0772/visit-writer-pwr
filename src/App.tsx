@@ -149,7 +149,7 @@ export default function App() {
       const content = generateVisitReport(record);
       updateField('fullContent', content);
     }
-  }, [autoSync, record.providerName, record.providerNo, record.providerId, record.visitMethod, record.visitMethodOther, record.visitDate, record.visitTime, record.visitorName, record.hasChildren, record.children, record.serviceType, record.visitCategories, record.initialVisitCount, record.newChildName, record.reinforceReason, record.annualVisitCount, record.currentVisitCount, record.visitCountDesc, record.isJoint, record.jointProvider1Name, record.jointProvider1Children, record.jointProvider2Name, record.jointProvider2Children, record.prevFollowUp, record.currentVisitFocus, record.unitName, record.subsidyChildCount, record.subsidyChildNames, record.hasNoSubsidyChild, record.noSubsidyInfo, record.actualChildCount, record.siteCheckResult, record.siteCheckReason, record.feeCheckResult, record.feeCheckReason, record.feeDetails, record.matchNeeds, record.visitStatusDesc, record.childEnrollmentStatus, record.childStatuses, record.envCheckResult, record.envCheckReason, record.envCheckNotEvalReason, record.envFacilities, record.envFacilitiesOther, record.envComfort, record.envComfortOther, record.noSmokingResult, record.noSmokingDesc, record.envDesc, record.envCheckItems, record.routineCheck, record.routineDesc, record.routineOther, record.activities, record.activitiesOther, record.activitiesDesc, record.mealPrep, record.mealPrepOther, record.mealPrepDesc, record.dietQuality, record.dietQualityDesc, record.dietQualityOther, record.mealSpace, record.mealSpaceDesc, record.mealSpaceOther, record.mealWay, record.mealWayDesc, record.mealWayOther, record.mealCleanProcess, record.childCleanAfterMeal, record.toyClean, record.toyCleanOther, record.toyCleanDesc, record.envClean, record.envCleanOther, record.envCleanDesc, record.batheChild, record.batheChildDesc, record.qualityDesc, record.qualityCheckResult, record.qualityCheckItems, record.qualityCheckReason, record.fourChildCheckResult, record.fourChildCheckItems, record.fourChildCheckReason, record.gameInteraction, record.gameInteractionDesc, record.positiveResponse, record.positiveResponseDesc, record.socialDevSupport, record.socialDevSupportDesc, record.otherInteractionObs, record.dailyHandover, record.parentCooperation, record.providerHealthSelf, record.visitorEval, record.visitorEvalReasons, record.visitorEvalOther, record.familyHealth, record.familyHealthReason, record.familyHealthDesc, record.familySupport, record.familySupportDesc, record.workImpactFamily, record.workImpactFamilyDesc, record.hasEmergencyDrill, record.emergencyDrill, record.emergencyDrillDesc, record.hasPendingFollowUp, record.pendingFollowUp, record.suggestedGuidance, record.safetyPropaganda, record.safetyPropagandaOther, record.generalPropaganda, record.generalPropagandaOther, record.providerAttitude, record.serviceNeeds, record.fieldGuidanceRecord, record.nextFollowUpFocus, record.isViolation, record.reviewResultDesc]);
+  }, [autoSync, record.providerName, record.providerNo, record.providerId, record.visitMethod, record.visitMethodOther, record.visitDate, record.visitTime, record.visitorName, record.hasChildren, record.children, record.serviceType, record.visitCategories, record.initialVisitCount, record.newChildName, record.reinforceReason, record.annualVisitCount, record.currentVisitCount, record.visitCountDesc, record.isJoint, record.jointProvider1Name, record.jointProvider1Children, record.jointProvider2Name, record.jointProvider2Children, record.prevFollowUp, record.currentVisitFocus, record.unitName, record.subsidyChildCount, record.subsidyChildNames, record.hasNoSubsidyChild, record.noSubsidyInfo, record.actualChildCount, record.siteCheckResult, record.siteCheckReason, record.feeCheckResult, record.feeCheckReason, record.feeDetails, record.matchNeeds, record.visitStatusDesc, record.childEnrollmentStatus, record.childStatuses, record.envCheckResult, record.envCheckReason, record.envCheckNotEvalReason, record.envFacilities, record.envFacilitiesOther, record.envComfort, record.envComfortOther, record.noSmokingResult, record.noSmokingDesc, record.envDesc, record.envCheckItems, record.routineCheck, record.routineDesc, record.routineOther, record.activities, record.activitiesOther, record.activitiesDesc, record.mealPrep, record.mealPrepOther, record.mealPrepDesc, record.dietQuality, record.dietQualityDesc, record.dietQualityOther, record.mealSpace, record.mealSpaceDesc, record.mealSpaceOther, record.mealWay, record.mealWayDesc, record.mealWayOther, record.mealCleanProcess, record.childCleanAfterMeal, record.toyClean, record.toyCleanOther, record.toyCleanDesc, record.envClean, record.envCleanOther, record.envCleanDesc, record.batheChild, record.batheChildDesc, record.qualityDesc, record.qualityCheckResult, record.qualityCheckItems, record.qualityCheckObserve, record.qualityCheckReason, record.fourChildCheckResult, record.fourChildCheckItems, record.fourChildCheckReason, record.gameInteraction, record.gameInteractionDesc, record.positiveResponse, record.positiveResponseDesc, record.socialDevSupport, record.socialDevSupportDesc, record.otherInteractionObs, record.dailyHandover, record.parentCooperation, record.providerHealthSelf, record.visitorEval, record.visitorEvalReasons, record.visitorEvalOther, record.familyHealth, record.familyHealthReason, record.familyHealthDesc, record.familySupport, record.familySupportDesc, record.workImpactFamily, record.workImpactFamilyDesc, record.hasEmergencyDrill, record.emergencyDrill, record.emergencyDrillDesc, record.hasPendingFollowUp, record.pendingFollowUp, record.suggestedGuidance, record.safetyPropaganda, record.safetyPropagandaOther, record.generalPropaganda, record.generalPropagandaOther, record.providerAttitude, record.serviceNeeds, record.fieldGuidanceRecord, record.nextFollowUpFocus, record.isViolation, record.reviewResultDesc]);
 
   // Update time every second
   useEffect(() => {
@@ -448,11 +448,11 @@ export default function App() {
         hasIssues = record.childStatuses.some(s => s.health === '異常' || s.spirit === '異常' || s.appearance === '異常' || s.devCheck === '異常' || s.interaction === '異常' || s.sleepStatus.includes('趴睡（應宣導趴睡風險及五招安心睡）') || s.sleepPosture === '一歲以下幼兒非仰睡（應輔導）');
         break;
       case "十一、托育環境":
-        isFilled = !!(record.envCheckResult || record.envCheckReason || record.envFacilities.length > 0 || record.envComfort.length > 0 || record.noSmokingResult || record.envDesc);
-        hasIssues = record.envCheckResult === '不符合' || record.noSmokingResult === '不符合' || (record.envCheckItems && record.envCheckItems.length > 0);
+        isFilled = !!(record.envCheckResult || record.envCheckReason || record.envFacilities.length > 0 || record.envComfort.length > 0 || record.envDesc);
+        hasIssues = record.envCheckResult === '不符合' || (record.envCheckItems && record.envCheckItems.length > 0);
         break;
       case "十二、托育品質":
-        isFilled = !!(record.routineCheck || record.qualityCheckResult || record.fourChildCheckResult || record.activities.length > 0 || record.mealPrep.length > 0 || record.dietQuality || record.mealSpace || record.mealWay || record.toyClean || record.envClean);
+        isFilled = !!(record.routineCheck || record.qualityCheckResult || record.qualityCheckObserve || record.fourChildCheckResult || record.activities.length > 0 || record.mealPrep.length > 0 || record.dietQuality || record.mealSpace || record.mealWay || record.toyClean || record.envClean);
         hasIssues = record.routineCheck === '不符合' || record.dietQuality === '不符合' || record.mealSpace === '不符合' || record.mealWay === '不符合' || record.qualityCheckResult === '不符合' || record.fourChildCheckResult === '不符合';
         break;
       case "十三、托育人員與托兒間互動與社會行為":
@@ -1072,7 +1072,7 @@ export default function App() {
               <div className="space-y-6">
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
                   <SelectField 
-                    label="1. 托育環評 40 項檢查結果" 
+                    label="1. 托育環境安全檢核" 
                     options={['符合', '不符合', '本次未環評']} 
                     value={record.envCheckResult} 
                     onChange={(v) => {
@@ -1107,7 +1107,7 @@ export default function App() {
             </FormSection>
 
             {/* 十二、托育品質 */}
-            <FormSection title="十二、托育品質" icon={<CheckCircle2 className="w-5 h-5" />} borderColor="border-indigo-600" isOpen={openSections['quality']} onToggle={() => toggleSection('quality')} extraActions={<SectionActions sectionKeys={['routineCheck', 'routineDesc', 'routineOther', 'activities', 'activitiesOther', 'mealPrep', 'mealPrepOther', 'dietQuality', 'dietQualityDesc', 'dietQualityOther', 'mealSpace', 'mealSpaceDesc', 'mealSpaceOther', 'mealWay', 'mealWayDesc', 'mealWayOther', 'mealCleanProcess', 'childCleanAfterMeal', 'toyClean', 'toyCleanOther', 'toyCleanDesc', 'envClean', 'envCleanOther', 'envCleanDesc', 'batheChild', 'batheChildDesc', 'qualityDesc', 'qualityCheckResult', 'qualityCheckItems', 'qualityCheckReason', 'fourChildCheckResult', 'fourChildCheckItems', 'fourChildCheckReason']} title="托育品質" />}>
+            <FormSection title="十二、托育品質" icon={<CheckCircle2 className="w-5 h-5" />} borderColor="border-indigo-600" isOpen={openSections['quality']} onToggle={() => toggleSection('quality')} extraActions={<SectionActions sectionKeys={['routineCheck', 'routineDesc', 'routineOther', 'activities', 'activitiesOther', 'mealPrep', 'mealPrepOther', 'dietQuality', 'dietQualityDesc', 'dietQualityOther', 'mealSpace', 'mealSpaceDesc', 'mealSpaceOther', 'mealWay', 'mealWayDesc', 'mealWayOther', 'mealCleanProcess', 'childCleanAfterMeal', 'toyClean', 'toyCleanOther', 'toyCleanDesc', 'envClean', 'envCleanOther', 'envCleanDesc', 'batheChild', 'batheChildDesc', 'qualityDesc', 'qualityCheckResult', 'qualityCheckItems', 'qualityCheckObserve', 'qualityCheckReason', 'fourChildCheckResult', 'fourChildCheckItems', 'fourChildCheckReason']} title="托育品質" />}>
               <div className="space-y-6">
                 <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
                   <SelectField label="1. 安排基本作息與活動時間" options={['符合', '不符合']} value={record.routineCheck} onChange={(v) => updateField('routineCheck', v)} />
@@ -1160,6 +1160,12 @@ export default function App() {
                         updateField('qualityCheckItems', []);
                       }
                     }} 
+                  />
+                  <TextAreaField 
+                    label="待觀察項目" 
+                    value={record.qualityCheckObserve} 
+                    onChange={(v) => updateField('qualityCheckObserve', v)} 
+                    placeholder="請輸入待觀察項目說明..."
                   />
                   {record.qualityCheckResult === '不符合' && (
                     <div className="space-y-4 pt-2">

@@ -5,7 +5,7 @@ export const getFollowUpItems = (record: VisitRecord) => {
 
   if (record.siteCheckResult === '不符合') followUpItems.push({ target: '托育查核', label: '訪視現場親見幼兒與收托資料', status: '不符合' });
   if (record.feeCheckResult === '否') followUpItems.push({ target: '托育查核', label: '托育人員收費是否與托育契約書一致', status: '否' });
-  if (record.envCheckResult === '不符合') followUpItems.push({ target: '托育環境', label: '托育環評40項檢查結果', status: '不符合' });
+  if (record.envCheckResult === '不符合') followUpItems.push({ target: '托育環境', label: '托育環境安全檢核', status: '不符合' });
   if (record.routineCheck === '不符合') followUpItems.push({ target: '托育品質', label: '基本作息與活動時間', status: '不符合' });
   if (record.dietQuality === '不符合') followUpItems.push({ target: '托育品質', label: '均衡飲食', status: '不符合' });
   if (record.mealSpace === '不符合') followUpItems.push({ target: '托育品質', label: '用餐空間、用品', status: '不符合' });
@@ -190,6 +190,7 @@ export const generateVisitReport = (record: VisitRecord): string => {
     (record.envClean || record.envCleanDesc) ? `► 環境衛生：${record.envClean ? otherS(record.envClean, record.envCleanOther) : ''}${record.envCleanDesc ? `（${record.envCleanDesc}）` : ''}` : '',
     record.batheChild ? `► 托育人員是否幫幼兒洗澡：${record.batheChild}${record.batheChildDesc ? `（${record.batheChildDesc}）` : ''}` : '',
     record.qualityCheckResult ? `► 照顧品質評估指標檢核：${record.qualityCheckResult}` : '',
+    record.qualityCheckObserve ? `► 待觀察項目：<br/>${nl2br(record.qualityCheckObserve)}` : '',
     record.qualityCheckItems && record.qualityCheckItems.length > 0 ? `► 不符合指標：<br/>${record.qualityCheckItems.join('<br/>')}` : '',
     record.qualityCheckReason ? `► 不符合原因說明：<br/>${nl2br(record.qualityCheckReason)}` : '',
     record.fourChildCheckResult ? `► 居家托育人員收托4名兒童訪視檢核表：${record.fourChildCheckResult}` : '',
